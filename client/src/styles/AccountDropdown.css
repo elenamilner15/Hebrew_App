@@ -1,0 +1,7 @@
+/* client\src\styles\AccountDropdown.css */
+.account-dropdown {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    min-width: 200px;
+}

@@ -1,0 +1,79 @@
+body {
+    font-family: Nunito, arial, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.header {
+    font-family: Nunito, arial, sans-serif;
+    font-size: 32px;
+    display: flex;
+    /* background-color: rgb(105, 236, 131); */
+    background-color: #86B6F6;
+    background-image: url("pic/bd5.png");
+    background-repeat: no-repeat;
+
+    background-size: auto 160%;
+    background-position: right center;
+    align-items: center;
+    padding: 10px;
+}
+
+.menu-bar {
+    font-family: Nunito, arial, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+
+    display: flex;
+    justify-content: space-between;
+
+    background-color: #FFEBD8;
+    padding: 30px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    height: 40px;
+}
+
+/* Dropdown style */
+.dropdown-header {
+    font-family: Nunito, arial, sans-serif;
+    font-size: 20px;
+    color: black;
+    cursor: pointer;
+
+    border: 2px solid #86B6F6;
+    border-radius: 12px;
+    width: 200px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    justify-content: space-between;
+    padding: 0 15px;
+
+}
+
+
+.dropdown-list {
+    border: 2px solid #86B6F6;
+    list-style: none;
+    padding: 5px 10px 5px 10px;
+
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+.dropdown-list li {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.dropdown-list li:hover {
+    background-color: #fff;
+}
+
+.dropdown-header:hover {
+    background-color: #fff;
+}
