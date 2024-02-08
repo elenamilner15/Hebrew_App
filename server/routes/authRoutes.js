@@ -19,7 +19,7 @@ router.get('/users', authController.getAllUsers);
 // restore-password
 router.post('/password', authController.restorePassword);
 // new-password
-router.post('/new-password', authController.setNewPassword);
+router.post('/new-password', authController.newPassword);
 
 
 router.use((req, res, next) => {

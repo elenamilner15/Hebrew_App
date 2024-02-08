@@ -2,6 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchUserProfile } from '../../api';
+import '../../styles/Basic.css';
+import '../../styles/Profile.css';
+import BasicLayout from '../../layouts/BasicLayout.js';
+import MenuBar from '../MenuBar';
+
 
 const Profile = () => {
     const { username } = useParams();
@@ -28,16 +33,42 @@ const Profile = () => {
 
 
     return (
-        <div>
-            <p>Hello!</p>
-            {/* Render the profile data in the component */}
-            {profile && (
-                <div>
+        <BasicLayout>
+            <div className="page">
+
+                <MenuBar />
+                <div className="profile">
+                    <p>Hello!</p>
+
+
                     <h1>{username}'s Profile</h1>
-                    {/* Render other profile information as needed */}
+
+
                 </div>
-            )}
-        </div>
+
+            </div>
+
+            {/* Overlay effect */}
+            {/* <Overlay showOverlay={showLogin} onClose={closeLogin} /> */}
+        </BasicLayout >
+
+
+
+
+        // <BasicLayout>
+        //     <div>
+
+        //         <p>Hello!</p>
+
+        //         {profile && (
+        //             <div>
+        //                 <h1>{username}'s Profile</h1>
+
+        //             </div>
+        //         )}
+
+        //     </div>
+        // </BasicLayout>
     );
 };
 

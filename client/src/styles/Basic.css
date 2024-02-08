@@ -77,3 +77,26 @@ body {
 .dropdown-header:hover {
     background-color: #fff;
 }
+
+
+.home-button {
+    font-family: Nunito, arial, sans-serif;
+    font-size: 20px;
+    color: black;
+    cursor: pointer;
+
+    border: 2px solid #86B6F6;
+    border-radius: 12px;
+    width: 200px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 15px;
+    background-color: #FFEBD8;
+}
+
+.home-button:hover {
+    background-color: #fff;
+}

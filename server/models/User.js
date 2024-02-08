@@ -1,4 +1,4 @@
-//models/User.js
+//server\models\User.js
 const db = require('../database/connection');
 
 // Function to create a new user

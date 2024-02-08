@@ -21,6 +21,25 @@ export const fetchData = async (path, part_of_speech) => {
     }
 };
 
+// client/src/api.js
+// Function to fetch Infinitive
+export const fetchInfinitive = async (path) => {
+    const apiUrl = `${serverUrl}${path}`;
+
+    try {
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching Infinitive:', error);
+        throw error;
+    }
+};
 
 
 // Function to register a new user
@@ -47,6 +66,38 @@ export const register = async (formData) => {
     }
 };
 
+
+
+// // Function to login a user
+// export const login = async (passwordInput, resetToken) => {
+//     const apiUrl = `${serverUrl}/auth/login`;
+//     console.log(apiUrl)///check!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+//     try {
+//         const response = await fetch(apiUrl, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({ passwordInput, resetToken }),
+//         });
+
+//         console.log('Login response:', response); // Log the response details
+//         console.log(passwordInput);
+//         console.log(resetToken);
+
+//         if (!response.ok) {
+//             console.error('Login failed due to HTTP error:', response.status);
+//             return false; // Login failed
+//         }
+
+//         return true; // Login successful
+//     } catch (error) {
+//         console.error('Error during login:', error);
+//         throw error;
+//     }
+// };
+
 // Function to login a user
 export const login = async (formData) => {
     const apiUrl = `${serverUrl}/auth/login`;
@@ -61,6 +112,12 @@ export const login = async (formData) => {
             body: JSON.stringify(formData),
         });
 
+        console.log('Login response:', response); // Log the response details
+        // console.log(passwordInput);
+        // console.log(resetToken);
+        console.log(formData);
+
+
         if (!response.ok) {
             console.error('Login failed due to HTTP error:', response.status);
             return false; // Login failed
@@ -72,6 +129,7 @@ export const login = async (formData) => {
         throw error;
     }
 };
+
 
 
 // client/src/api.js
@@ -147,32 +205,46 @@ export const logout = async () => {
         throw error;
     }
 };
-
+//client\src\api.js
 //setNewPassword
-export const setNewPassword = async (formData) => {
+export const newPassword = async (passwordInput, resetToken) => {
+    console.log('API.JS');
     const apiUrl = `${serverUrl}/auth/new-password`;
+    console.log(apiUrl);
+    console.log('newPassword called', passwordInput);
+    console.log('resetToken called', resetToken);
 
     try {
+        console.log('newPassword called', passwordInput);
+        console.log('resetToken called', resetToken);
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ passwordInput, resetToken }),
         });
 
         if (!response.ok) {
-            console.error('Setting new password failed due to HTTP error:', response.status);
-            throw new Error(`Setting new password failed: ${response.statusText}`);
+            console.log('!response.ok')
+            console.error('Password change failed:', response.status);
+            // return false; // Login failed
+            return { success: false, error: response.status }; // Return error information
         }
 
-        // console.log('New password set successfully!');
-        const responseData = await response.json();
-        console.log('New password set successfully!', responseData);
+        // console.log('OK!');
+        const userData = await response.json(); // Assuming your API returns user data upon success
+
+        console.log('OK!', userData);
 
         // return true;
+        return { success: true, data: userData }; // Return success and user data
+
+
     } catch (error) {
-        console.error('Error setting new password:', error);
+        console.error('Error changing password:', error);
         throw error;
     }
 };
+
+

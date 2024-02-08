@@ -6,6 +6,8 @@ const db = require('../database/connection')
 const crypto = require('crypto'); // Restore password
 const { sendPasswordResetEmail } = require('../utils/emailUtils');
 
+
+
 const secretKey = 'test';
 
 // Register a new user
@@ -132,7 +134,7 @@ exports.restorePassword = async (req, res) => {
         }
 
 
-        // Generate a unique token for password reset
+        // Generate a unique token for password restore
         const resetToken = generateRandomToken();
         console.log('Generated Reset Token:', resetToken);
 
@@ -158,27 +160,54 @@ exports.restorePassword = async (req, res) => {
 
 //server\controllers\authController.js
 // Controller function to set the new password
-exports.setNewPassword = async (req, res) => {
+exports.newPassword = async (req, res, dispatchCallback) => {
+    console.log('authController')
     try {
-        const { password, resetToken } = req.body;
+        const { username, passwordInput, resetToken } = req.body;
 
         // Find the user by the reset token
         const user = await User.findUserByResetToken(resetToken);
+        console.log(user)
 
         if (!user) {
             return res.status(404).json({ message: 'Invalid reset token' });
         }
 
         // Hash the new password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(passwordInput, 10);
+        console.log('Updating user password and clearing reset token');
+
+
+
 
         // Update user's password and clear the reset token
         await User.updateUserPassword(user.email, hashedPassword);
-        await User.clearUserResetToken(user.email);
+        // await User.clearUserResetToken(user.email);//??????????????
 
-        res.status(200).json({ message: 'Password set successfully' });
+
+
+        // Set the JWT token as an HTTP cookie
+        const token = jwt.sign({ id: user.id, username: user.username }, secretKey);
+
+        res.cookie('token', token, { httpOnly: true });
+        console.log('Password set successfully');
+        res.status(200).json({
+            message: 'Password set successfully',
+            user: {
+                id: user.id,
+                username: user.username,
+            },
+        });
+
+
     } catch (error) {
         console.error('Error setting new password:', error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
+
+
+
+
+
+

@@ -41,19 +41,24 @@ const userReducer = (state = initialState, action) => {
         case 'USER_LOGGED_OUT':
             return initialState;
 
-        case 'SET_RESET_TOKEN':
+        case 'RESET_TOKEN':
             return { ...state, resetToken: action.payload };
 
 
+        case 'NEW_PASSWORD':
+            return { ...state, newPassword: action.payload };
 
-        case 'SET_PASSWORD':
-            return {
-                ...state,
-                passwordUpdated: action.payload,
-            };
+        case 'CLEAR_RESET_TOKEN':
+            return { ...state, resetToken: null };
+
+
+        // case 'SET_PASSWORD_CHANGED':
+        //     return { ...state, passwordChanged: action.payload };
+
 
         default:
             return state;
+
     }
 };
 

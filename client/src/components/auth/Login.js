@@ -7,7 +7,7 @@ import { login } from '../../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 
 // function Login({ onLogin }) {
-function Login({ previousPath }) {
+function Login() { //Login({ previousPath })
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -21,8 +21,6 @@ function Login({ previousPath }) {
     const [loginError, setLoginError] = useState('');
 
 
-
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -33,13 +31,13 @@ function Login({ previousPath }) {
     };
 
     //back to the home
-    // const handleBackToHome = () => {
-    //     navigate('/');
-    // };
-
     const handleLoginClose = () => {
-        navigate(previousPath || '/');
+        navigate('/');
     };
+
+    // const handleLoginClose = () => {
+    //     navigate(previousPath || '/');
+    // };
     //_______________
 
     const handleSubmit = async (e) => {
@@ -52,8 +50,8 @@ function Login({ previousPath }) {
 
             if (success) {
                 console.log(`${formData.username} logged in successfully`);
-                // navigate(previousPath || '/'); // Navigate to the previous path or home
                 handleLoginClose();
+
 
             } else {
                 console.log('Login failed. Credentials');

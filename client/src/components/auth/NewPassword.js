@@ -1,9 +1,9 @@
 // client/src/components/auth/NewPassword.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PasswordLayout from '../../layouts/PasswordLayout.js';
-import { setResetToken, setNewPassword } from '../../redux/actions/userActions.js';
+import { newPassword, setResetToken, clearResetToken, login } from '../../redux/actions/userActions.js';
 import '../../styles/NewPassword.css';
 
 
@@ -11,57 +11,111 @@ function NewPassword() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
+    const resetToken = useSelector((state) => state.user.resetToken); // Reset token from Redux state
 
 
-    // useEffect(() => {
-    //     // Extract reset token from the URL
-    //     const searchParams = new URLSearchParams(location.search);
-    //     const token = searchParams.get('token');
+    const [passwordInput, setPasswordInput] = useState('');
+    const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
 
-    //     // Optionally, you can validate the token here
+    const [passwordError, setPasswordError] = useState('');
 
-    //     // Save the token for submitting the new password
-    //     // dispatch(setResetToken(token));
-    //     dispatch(setResetToken(token));
-    // }, [location.search, dispatch]);
 
-    const handleSetNewPassword = async (e) => {
+
+
+
+    useEffect(() => {
+        // Extract reset token from the URL
+        const searchParams = new URLSearchParams(location.search);
+        const token = searchParams.get('token');
+        // Check if the token exists before dispatching
+        if (token) {
+            dispatch(setResetToken(token));
+        }
+    }, [location.search, dispatch]);
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
+        if (passwordInput !== confirmPasswordInput) {
+            setPasswordError('Passwords do not match');
             return;
         }
 
+        //     try {
+        //         console.log('Submitting passwordInput:', passwordInput);
+        //         console.log(passwordInput);
+        //         console.log(resetToken);
+
+        //         const success = await dispatch(newPassword(passwordInput, resetToken));//
+
+        //         console.log('After dispatching setNewPassword action');
+
+        //         if (success) {
+        //             const { user } = success.payload; // Retrieve the user object from the payload
+        //             console.log('Password is set successfully for user:', user.username);
+
+
+
+
+        //             // Dispatch the login action to log in the user
+        //             await dispatch(login({ username: user.username, password: passwordInput }));//
+
+        //             // Clear the resetToken in the Redux store
+        //             dispatch(clearResetToken());
+
+        //             // Redirect the user to the home page
+        //             navigate('/');
+
+
+
+
+        //         } else {
+        //             console.log('Password setting failed');
+        //         }
+
+        //     } catch (error) {
+        //         console.error('Error during newPassword:', error);
+        //     }
+        // };
+
+
+
         try {
-            // Extract reset token from the URL
-            const searchParams = new URLSearchParams(location.search);
-            const resetToken = searchParams.get('token');
+            const response = await dispatch(newPassword({ passwordInput }, resetToken));
 
-            // Dispatch an action to set the new password
-            const success = await dispatch(setNewPassword({ password, resetToken }));
+            if (response.success) {
+                const { user } = response.payload;
+                console.log('Password set successfully for user:', user.username);
 
-            if (success) {
-                console.log('Password set successfully!');
+                await dispatch(login({ username: user.username, password: passwordInput }));
+                dispatch(clearResetToken());
                 navigate('/');
             } else {
-                console.log('trouble!!!')
-                setError('Password reset failed');
+                console.log('Password setting failed');
             }
         } catch (error) {
-            console.error('Error setting new password:', error);
-            setError('Password reset failed');
+            console.error('Error during newPassword:', error);
         }
     };
+
+
+
+
+
+
+
+
+
+
+
 
     //back to the home
     const handleBackToHome = () => {
         navigate('/');
     };
+
+
 
     return (
         <PasswordLayout>
@@ -74,28 +128,34 @@ function NewPassword() {
                     </div>
                 </div>
 
-                <form className="new-password-content" onSubmit={handleSetNewPassword}>
-                    <label htmlFor="password">New Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className={`new-password-input`}
-                    />
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        required
-                        className={`new-password-input ${error && 'error'}`}
-                    />
-                    <button type="submit" className="new-password-content button">Set Password</button>
-                    {error && <p className="error-message">{error}</p>}
-                </form>
+                <div className="new-password-content">
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label htmlFor="passwordInput">New Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                value={passwordInput}
+                                onChange={(e) => setPasswordInput(e.target.value)}
+                                required
+                                className={`new-password-input`}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="confirmPasswordInput">Confirm Password:</label>
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                value={confirmPasswordInput}
+                                onChange={(e) => setConfirmPasswordInput(e.target.value)}
+                                required
+                                className={`new-password-input ${passwordError && 'error'}`}
+                            />
+                        </div>
+                        <button type="submit" className="new-password-content button">Set Password</button>
+                        {passwordError && <p className="error-message">{passwordError}</p>}
+                    </form>
+                </div>
             </div>
         </PasswordLayout>
     );

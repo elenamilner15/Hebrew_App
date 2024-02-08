@@ -1,11 +1,7 @@
-// client/src/components/MenuBar.js
+// client/src/components/MenuBar2.js
 import React, { useState, useEffect } from 'react';
-import Overlay from './styles/Overlay.js';
-import Login from './auth/Login.js';
 
-import LanguageDropdown from './styles/LanguageDropdown.js';
 import AccountDropdown from './styles/AccountDropdown.js';
-import RestorePassword from './auth/RestorePassword.js';
 
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,14 +15,9 @@ const MenuBar = () => {
     const [showLogin, setShowLogin] = useState(false);
     const [previousPath, setPreviousPath] = useState(null); //previous path
 
-    //______________________
-    // useEffect(() => {
-    //     if (isLoggedIn) {
-    //         setShowLogin(false);
-    //     }
-    // }, [isLoggedIn, dispatch]);
 
-    console.log('Is logged in:', isLoggedIn); // Log the login state
+
+    console.log('Is logged in:', isLoggedIn); //login state
 
 
     const handleLogout = async () => {
@@ -38,8 +29,6 @@ const MenuBar = () => {
             console.error('Error during logout:', error);
         }
     };
-
-
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -58,15 +47,17 @@ const MenuBar = () => {
         setShowLogin(true);
     };
 
-    // const closeLogin = () => {
-    //     setShowLogin(false);
-    // };
+    //back to the home
+    const handleBackToHome = () => {
+        navigate('/');
+    };
+
 
     return (
         <div className="menu-bar">
-            <div className="language-list">
-                <LanguageDropdown />
-            </div>
+            <button onClick={handleBackToHome} className="home-button">
+                HOME
+            </button>
             <div className="abc">
                 {isLoggedIn ? (
                     // <AccountDropdown />
@@ -77,12 +68,9 @@ const MenuBar = () => {
                     </button>
                 )}
             </div>
-            {/* <Overlay showOverlay={showLogin} onClose={closeLogin}>
-                <Login onLogin={() => { }} closeLogin={closeLogin} />
-            </Overlay> */}
+
         </div>
     );
 };
-
 
 export default MenuBar;

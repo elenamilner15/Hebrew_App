@@ -1,0 +1,12 @@
+/* client\src\styles\G_Vocabulary.css */
+.original {
+    margin-right: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+.meaning {
+    margin-left: 10px;
+    color: red;
+    cursor: pointer;
+}

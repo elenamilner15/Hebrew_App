@@ -1,0 +1,149 @@
+.explevel {
+    box-sizing: border-box;
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 60px;
+    margin-left: -12px;
+    margin-right: -12px;
+
+    height: 80px;
+
+
+}
+
+.borderlevel {
+
+    width: 660px;
+    height: 80px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-wrap: wrap;
+
+    border-radius: 12px;
+}
+
+.level {
+    align-items: center;
+    border-radius: 12px;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 220px;
+    height: 80px;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+
+.level.active {
+    background-color: #86B6F6;
+    color: #fff;
+
+}
+
+
+.level p {
+    font-weight: bold;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+
+
+
+.categories {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    margin-top: 60px;
+    margin-left: -12px;
+    margin-right: -12px;
+}
+
+
+
+.cat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 30px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+    cursor: pointer;
+    overflow: hidden;
+    min-width: 260px;
+    min-height: 260px;
+    width: 380px;
+    height: 380px;
+    transition: transform 0.2s ease;
+}
+
+.cat p {
+    font-weight: bold;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.cat:hover {
+    transform: translateY(-10px);
+}
+
+
+
+.c1 {
+    background: #FFEBD8 url('pic/icons/cat1.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c2 {
+    background: #FFEBD8 url('pic/icons/cat23.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c3 {
+    background: #FFEBD8 url('pic/icons/cat3.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c4 {
+    background: #FFEBD8 url('pic/icons/cat44.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c5 {
+    background: #FFEBD8 url('pic/icons/cat5.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c6 {
+    background: #FFEBD8 url('pic/icons/cat6.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c7 {
+    background: #FFEBD8 url('pic/icons/cat7.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c8 {
+    background: #FFEBD8 url('pic/icons/cat8.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c9 {
+    background: #FFEBD8 url('pic/icons/cat9.png') center/cover no-repeat;
+    background-size: 80%;
+}
+
+.c13 {
+    background: #FFEBD8 url('pic/icons/cat13.png') center/cover no-repeat;
+    background-size: 80%;
+}

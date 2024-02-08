@@ -3,7 +3,7 @@
 import { login as apiLogin, fetchUserProfile } from '../../api';
 import { restorePassword as apiRestorePassword } from '../../api';
 import { logout as apiLogout } from '../../api';
-import { setNewPassword as apiSetNewPassword } from '../../api';
+import { newPassword as apiNewPassword } from '../../api';
 
 export const login = (formData) => {
     return async (dispatch) => {
@@ -94,7 +94,7 @@ export const logout = () => {
             // Dispatch actions to update Redux state
             dispatch(setUserData({ isLoggedIn: false, username: '' }));
             dispatch(updateProfile({ score: null, progress: null, level: null, achievements: [] }));
-            dispatch(updateToken('')); // Assuming your token state is a string
+            dispatch(updateToken(''));
 
             return true;
 
@@ -105,26 +105,83 @@ export const logout = () => {
     };
 };
 
+
+
+// client\src\redux\actions\userActions.js
 export const setResetToken = (token) => ({
-    type: 'SET_RESET_TOKEN',
+    type: 'RESET_TOKEN',
     payload: token,
 });
 
+export const clearResetToken = () => ({
+    type: 'CLEAR_RESET_TOKEN',
+});
 
 
-export const setNewPassword = (formData) => {
-    return async (dispatch, getState) => {
+export const newPassword = (formData, resetToken) => {
+    console.log('userActions.js');
+    console.log('newPassword called', formData.passwordInput);
+    console.log('resetToken called', resetToken);
+
+    console.log('!!!', formData);
+
+    //     return async (dispatch) => {
+    //         try {
+    //             const response = await apiNewPassword(formData, resetToken);
+    //             // const success = await apiNewPassword(formData, resetToken);
+
+    //             // if (success) {
+    //             if (response.success) {
+    //                 // const { user } = response.data;  //
+    //                 const { user } = success.data;  //
+    //                 console.log('userActions.js Password changed successfully!');
+
+    //                 dispatch(setUserData({ isLoggedIn: true, username: user.username }));
+    //                 dispatch(updateProfile(user.profile));
+    //                 dispatch({ type: 'NEW_PASSWORD', payload: { user } });
+
+
+    //                 // dispatch({ type: 'NEW_PASSWORD', payload: true });
+
+    //                 // dispatch({ type: 'NEW_PASSWORD', payload: true });
+
+    //             } else {
+    //                 console.log('userActions.js Password change failed');
+    //                 dispatch({ type: 'NEW_PASSWORD', payload: false });
+    //             }
+    //             return success;
+    //             // return response.success;
+    //         } catch (error) {
+    //             console.error('Error changing password:', error);
+    //             throw error;
+    //         }
+    //     };
+    // };
+    return async (dispatch) => {
         try {
-            const { resetToken } = getState().user; // Assuming you store the reset token in the Redux state
+            const response = await apiNewPassword(formData.passwordInput, resetToken);
 
-            // Make an API call to set the new password
-            const success = await apiSetNewPassword({ ...formData, resetToken });
+            if (response.success) {
+                const { user } = response.data; // Retrieve the user object from the payload
+                console.log('Password changed successfully for user:', user.username);
 
-            dispatch({ type: 'SET_PASSWORD', payload: { success } });
+                dispatch({
+                    type: 'NEW_PASSWORD',
+                    payload: { user },
+                });
 
-            return success;
+                return { success: true, payload: { user } };
+            } else {
+                console.log('Password change failed');
+                dispatch({
+                    type: 'NEW_PASSWORD',
+                    payload: { user: null },
+                });
+
+                return { success: false, payload: null };
+            }
         } catch (error) {
-            console.error('Error setting new password:', error);
+            console.error('Error changing password:', error);
             throw error;
         }
     };
