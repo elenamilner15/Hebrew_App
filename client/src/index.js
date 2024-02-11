@@ -5,10 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom"
 
-import { Provider } from 'react-redux'; // Import the Provider from react-redux
-import store from './redux/store/store.js'; // Import your Redux store
+import { Provider } from 'react-redux';
+import store from './redux/store/store.js';
 
-import { setUserData, updateProfile, updateToken } from './redux/actions/userActions';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
+import { setUserData, updateToken } from './redux/actions/userActions';
 
 //_____________
 // Check if there is user data in localStorage
@@ -29,7 +32,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <DndProvider backend={HTML5Backend}>
+          <App />
+        </DndProvider>
       </BrowserRouter>
     </Provider>
   </React.StrictMode >

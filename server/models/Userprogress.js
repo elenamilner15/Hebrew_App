@@ -1,24 +1,6 @@
-// server\models\UserProgress.js
+// server\models\Userprogress.js
 const db = require('../database/connection');
 
-// Function to update user progress
-const updateUserProgress = async ({ userId, verbId, tense, score, attempts }) => {
-    try {
-        const result = await db.oneOrNone(
-            `
-            INSERT INTO user_progress (user_id, verb_id, tense, score, attempts, last_attempted_at)
-            VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
-            ON CONFLICT (user_id, verb_id, tense)
-            DO UPDATE SET score = EXCLUDED.score, attempts = EXCLUDED.attempts, last_attempted_at = CURRENT_TIMESTAMP
-            RETURNING *;
-            `,
-            [userId, verbId, tense, score, attempts]
-        );
-        return result;
-    } catch (error) {
-        throw error;
-    }
-};
 
 // Function to get user progress
 const getUserProgress = async (userId) => {
@@ -45,7 +27,45 @@ const getUserProgress = async (userId) => {
     }
 };
 
+// Function to create user progress
+const createUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
+    try {
+        const newprogress = await db.one(
+            `
+            INSERT INTO userprogress (user_id, verb_id, tense, score, attempts, last_attempted_at)
+            VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+            RETURNING *;
+            `,
+            [user_id, verb_id, tense, score, attempts]
+        );
+        return newprogress;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Function to update user progress
+const updateUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
+    try {
+        const updateprogress = await db.oneOrNone(
+            `
+            INSERT INTO userprogress (user_id, verb_id, tense, score, attempts, last_attempted_at)
+            VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
+            ON CONFLICT (user_id, verb_id, tense)
+            DO UPDATE SET score = EXCLUDED.score, attempts = EXCLUDED.attempts, last_attempted_at = CURRENT_TIMESTAMP
+            RETURNING *;
+            `,
+            [user_id, verb_id, tense, score, attempts]
+        );
+        return updateprogress;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
-    updateUserProgress,
     getUserProgress,
+    createUserProgress,
+    updateUserProgress,
+
 };

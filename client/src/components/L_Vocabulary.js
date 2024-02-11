@@ -43,16 +43,6 @@ function L_Vocabulary() {
                         </div>
                     </div>
 
-
-                    {/* <button className={selectedLevel === '1' ? 'active' : ''} onClick={() => handleLevelClick('1')}>
-                        Beginner
-                    </button>
-                    <button className={selectedLevel === '2' ? 'active' : ''} onClick={() => handleLevelClick('2')}>
-                        Advanced
-                    </button>
-                    <button className={selectedLevel === '3' ? 'active' : ''} onClick={() => handleLevelClick('3')}>
-                        Expert
-                    </button> */}
                 </div>
 
                 <div className="categories">

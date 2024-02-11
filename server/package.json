@@ -20,6 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.8",
     "nodemon": "^3.0.1",
-    "pg-promise": "^11.5.4"
+    "pg-promise": "^11.5.4",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1"
   }
 }

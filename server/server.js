@@ -6,6 +6,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const verbRoutes = require('./routes/verbRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const userRoutes = require('./routes/userRoutes');
 const port = process.env.PORT || 5500;
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(cors()); // Enable CORS for cross-origin requests
 app.use('/auth', authRoutes); // authentication routes under /auth
 app.use('/verbs', verbRoutes); // verb routes under /verbs
 app.use('/profile', profileRoutes); // profile routes under /profile
+app.use('/user', userRoutes); // profile routes under /profile
+
 
 
 // Start the server

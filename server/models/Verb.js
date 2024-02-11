@@ -68,17 +68,16 @@ const getInfinitive = async (level, category) => {
 
 
 
-
-// Function to fetch the next word from the list
-const fetchNextWord = async (level, category, currentIndex) => {
-    try {
-        const verbs = await getInfinitive(level, category);
-        const nextIndex = (currentIndex + 1) % verbs.length;
-        return verbs[nextIndex];
-    } catch (error) {
-        throw error;
-    }
-};
+// // Function to fetch the next word from the list
+// const fetchNextWord = async (level, category, currentIndex) => {
+//     try {
+//         const verbs = await getInfinitive(level, category);
+//         const nextIndex = (currentIndex + 1) % verbs.length;
+//         return verbs[nextIndex];
+//     } catch (error) {
+//         throw error;
+//     }
+// };
 
 
 
@@ -114,7 +113,6 @@ const getPresent = async (level, part_of_speech) => {
 module.exports = {
     countInfinitive,
     getInfinitive,
-    fetchNextWord,
     getPresent,
 
 };

@@ -23,9 +23,9 @@ export const fetchData = async (path, part_of_speech) => {
 
 // client/src/api.js
 // Function to fetch Infinitive
-export const fetchInfinitive = async (path) => {
-    const apiUrl = `${serverUrl}${path}`;
-
+export const fetchInfinitive = async (level, category) => {
+    const apiUrl = `${serverUrl}/verbs/infinitive/${level}/${category}`;
+    console.log('apiUrl 2', apiUrl)
     try {
         const response = await fetch(apiUrl);
 
@@ -34,7 +34,9 @@ export const fetchInfinitive = async (path) => {
         }
 
         const data = await response.json();
+        console.log('DATA', data);
         return data;
+
     } catch (error) {
         console.error('Error fetching Infinitive:', error);
         throw error;
@@ -42,6 +44,37 @@ export const fetchInfinitive = async (path) => {
 };
 
 
+
+// client/src/api.js
+// Function to update user progress
+export const updateUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
+    const apiUrl = `${serverUrl}/updateUserProgress`;
+
+    console.log('apiUrl', apiUrl)
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id, verb_id, tense, score, attempts }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update user progress');
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error updating user progress:', error);
+        throw error;
+    }
+};
+
+
+
+////////////////////////////////////////////////////////////
 // Function to register a new user
 export const register = async (formData) => {
     const apiUrl = `${serverUrl}/auth/register`;
@@ -66,37 +99,6 @@ export const register = async (formData) => {
     }
 };
 
-
-
-// // Function to login a user
-// export const login = async (passwordInput, resetToken) => {
-//     const apiUrl = `${serverUrl}/auth/login`;
-//     console.log(apiUrl)///check!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-//     try {
-//         const response = await fetch(apiUrl, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({ passwordInput, resetToken }),
-//         });
-
-//         console.log('Login response:', response); // Log the response details
-//         console.log(passwordInput);
-//         console.log(resetToken);
-
-//         if (!response.ok) {
-//             console.error('Login failed due to HTTP error:', response.status);
-//             return false; // Login failed
-//         }
-
-//         return true; // Login successful
-//     } catch (error) {
-//         console.error('Error during login:', error);
-//         throw error;
-//     }
-// };
 
 // Function to login a user
 export const login = async (formData) => {
@@ -248,3 +250,35 @@ export const newPassword = async (passwordInput, resetToken) => {
 };
 
 
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+
+// Function to start the vocabulary game and update user progress
+export const startVocabularyGame = async (userId, verbsCount) => {
+    const apiUrl = `${serverUrl}/start-vocabulary-game`;
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId, verbsCount }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to start the vocabulary game');
+        }
+
+        return true; // Game started successfully
+    } catch (error) {
+        console.error('Error starting the vocabulary game:', error);
+        throw error;
+    }
+};

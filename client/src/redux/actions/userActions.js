@@ -125,38 +125,6 @@ export const newPassword = (formData, resetToken) => {
 
     console.log('!!!', formData);
 
-    //     return async (dispatch) => {
-    //         try {
-    //             const response = await apiNewPassword(formData, resetToken);
-    //             // const success = await apiNewPassword(formData, resetToken);
-
-    //             // if (success) {
-    //             if (response.success) {
-    //                 // const { user } = response.data;  //
-    //                 const { user } = success.data;  //
-    //                 console.log('userActions.js Password changed successfully!');
-
-    //                 dispatch(setUserData({ isLoggedIn: true, username: user.username }));
-    //                 dispatch(updateProfile(user.profile));
-    //                 dispatch({ type: 'NEW_PASSWORD', payload: { user } });
-
-
-    //                 // dispatch({ type: 'NEW_PASSWORD', payload: true });
-
-    //                 // dispatch({ type: 'NEW_PASSWORD', payload: true });
-
-    //             } else {
-    //                 console.log('userActions.js Password change failed');
-    //                 dispatch({ type: 'NEW_PASSWORD', payload: false });
-    //             }
-    //             return success;
-    //             // return response.success;
-    //         } catch (error) {
-    //             console.error('Error changing password:', error);
-    //             throw error;
-    //         }
-    //     };
-    // };
     return async (dispatch) => {
         try {
             const response = await apiNewPassword(formData.passwordInput, resetToken);

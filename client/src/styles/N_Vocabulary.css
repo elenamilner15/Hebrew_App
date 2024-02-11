@@ -89,7 +89,9 @@ h2 {
 
 /* client/src/styles/G_Vocabulary.css */
 
-
+.field {
+    border: 1px solid #ddd;
+}
 
 table {
     border-collapse: collapse;
@@ -131,4 +133,28 @@ button {
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+
+/* ////////////////////// */
+
+/* Define styles for the list container */
+ul {
+    list-style-type: none;
+    /* Remove default list styling */
+    padding: 0;
+}
+
+/* Define styles for each list item */
+li {
+    padding: 8px 0;
+    /* Add padding to separate each item */
+    border-bottom: 1px solid #ccc;
+    /* Add a bottom border to separate items */
+}
+
+/* Style for the last item to remove bottom border */
+li:last-child {
+    border-bottom: none;
+    /* Remove bottom border for the last item */
 }

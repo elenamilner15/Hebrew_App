@@ -1,6 +1,7 @@
 // server\controllers\verbController.js
 const Verb = require('../models/Verb');
-const db = require('../database/connection')
+const db = require('../database/connection');
+const calculateGroups = require('../utils/calculateGroups');
 
 exports.getInfinitive = async (req, res) => {
     try {
@@ -25,17 +26,46 @@ exports.countInfinitive = async (req, res) => {
     }
 };
 
-exports.fetchNextWord = async (req, res) => {
+// Function to update user progress
+exports.updateUserProgressController = async (req, res) => {
+    const { user_id, verb_id, tense, score, attempts } = req.body;
     try {
-        const { level, category, currentIndex } = req.params;
-        const nextWord = await fetchNextWord(level, category, currentIndex);
-        res.status(200).json(nextWord);
+        const progress = await updateUserProgress({ user_id, verb_id, tense, score, attempts });
+        res.status(200).json({ progress });
     } catch (error) {
-        console.error('Error fetching next word:', error);
-        res.status(500).json({ error: 'Error fetching next word' });
+        console.error('Error updating user progress:', error);
+        res.status(500).json({ error: 'Error updating user progress' });
     }
 };
 
+
+// Controller function to shuffle X Verbs
+exports.shuffleXVerbs = async (req, res) => {
+    try {
+        const { level, category } = req.params;
+
+
+        const { totalVerbs } = await countInfinitive(level, category);
+        const groups = calculateGroups(totalVerbs);
+
+        res.status(200).json({ groups });
+    } catch (error) {
+        console.error('Error shuffling X verbs:', error);
+        res.status(500).json({ error: 'Error shuffling X verbs' });
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////
 
 
 
