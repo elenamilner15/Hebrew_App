@@ -46,6 +46,7 @@ const getInfinitive = async (level, category) => {
 
         const verbs = await db.any(`
         SELECT
+          id,
           transcription,
           original,          
           root,
@@ -86,6 +87,7 @@ const getPresent = async (level, part_of_speech) => {
     try {
         const verbs = await db.any(`
         SELECT
+          id,
           meaning,
           root,
           ap_ms,

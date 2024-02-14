@@ -1,110 +1,42 @@
-/* 
-
-Style for the course block
-.course-block {
-    margin-bottom: 20px;
+body {
+    margin: 0;
+    padding: 0;
 }
 
-
-h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-
-.button-group {
-    margin-bottom: 20px;
-}
-
-.verbs-container {
+.table-container {
+    box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-}
 
-
-.verb-card {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.verb-card:hover {
-    background-color: #e0e0e0;
-}
-
-
-.test-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-
-.test-pairs-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
-}
-
-
-.test-pair {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.test-pair.selected {
-    background-color: #cfe2ff;
-}
-
-.test-pair:hover {
-    background-color: #e0e0e0;
-}
-
-
-.check-button {
     margin-top: 20px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+    margin-left: -12px;
+    margin-right: -12px;
 
-.check-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-} */
-
-
-/* client/src/styles/G_Vocabulary.css */
-
-.field {
-    border: 1px solid #ddd;
 }
 
 table {
     border-collapse: collapse;
-    width: 100%;
+    min-width: 400px;
+    width: 700px;
+
     margin-bottom: 20px;
 }
 
 th,
 td {
     border: 1px solid #ddd;
-    padding: 8px;
+    /* padding: 8px; */
     text-align: left;
+    height: 40px;
 }
+
+
+td {
+    min-width: 80px;
+
+}
+
 
 th {
     background-color: #f2f2f2;
@@ -157,4 +89,21 @@ li {
 li:last-child {
     border-bottom: none;
     /* Remove bottom border for the last item */
+}
+
+/* Define styles for draggable elements */
+.draggable {
+    cursor: move;
+    /* Set cursor to indicate draggable */
+    /* Add any other styles as needed */
+}
+
+
+td.droppable {
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+
 }

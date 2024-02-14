@@ -17,7 +17,7 @@ const MenuBar = () => {
 
 
 
-    console.log('Is logged in:', isLoggedIn); //login state
+    // console.log('Is logged in:', isLoggedIn); //login state
 
 
     const handleLogout = async () => {

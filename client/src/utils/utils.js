@@ -1,19 +1,14 @@
 //client\src\utils\utils.js
 
-export default function calculateGroups(totalVerbs) {
-    let r;
-    if (totalVerbs % 6 < 0.5) {
-        r = Math.floor(totalVerbs / 6) - 1;
-    } else {
-        r = Math.floor(totalVerbs / 6);
+export const calculateGroupSize = (totalVerbs, minSize = 5, maxSize = 9) => {
+    if (totalVerbs <= maxSize) return totalVerbs; // If total is within max, keep as one group
+
+    let groupSize = Math.ceil(totalVerbs / Math.ceil(totalVerbs / maxSize));
+
+    // Adjust if group size is smaller than minSize
+    if (groupSize < minSize) {
+        groupSize = minSize;
     }
-    const rr = (r === 0) ? 1 : r;
 
-    const x = Math.floor(totalVerbs / rr);
-    const y = x + 1;
-    const a = rr - (rr * (totalVerbs / rr - Math.floor(totalVerbs / rr)));
-    const b = rr * (totalVerbs / rr - Math.floor(totalVerbs / rr));
-
-
-    return [a, b, x, y];
-}
+    return groupSize;
+};

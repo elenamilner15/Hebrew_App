@@ -31,6 +31,7 @@ const getUserProfile = async (username) => {
         const profile = await db.oneOrNone(
             `
             SELECT
+              id,
               email,
               score          
             FROM users

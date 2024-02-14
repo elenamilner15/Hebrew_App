@@ -10,7 +10,7 @@ import '../styles/N_Vocabulary.css';
 import MenuBar from './MenuBar2.js';
 import BasicLayout from '../layouts/BasicLayout';
 import '../styles/MainContent.css';
-import calculateGroups from '../utils/utils';
+import { calculateGroupSize } from '../utils/utils';
 import { useDrag, useDrop } from 'react-dnd';
 
 
@@ -22,12 +22,12 @@ const N_Vocabulary = () => {
     const [testVerbs, setTestVerbs] = useState([]);
     const [guessVerbs, setGuessVerbs] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [a, b, x, y] = calculateGroups(verbs.length);
-    const [verbsFetched, setVerbsFetched] = useState(false); // Track if verbs have been fetched
-    const [showShuffled, setShowShuffled] = useState(false); // Track if shuffled verbs are displayed
-    const [regularVerbs, setRegularVerbs] = useState([]);
-    const [shuffledVerbs, setShuffledVerbs] = useState([]);
+
+    const [verbsFetched, setVerbsFetched] = useState(false);
+
     const [testTaken, setTestTaken] = useState(false);
+    const [droppedVerbs, setDroppedVerbs] = useState([]);
+    const [isCheckComplete, setIsCheckComplete] = useState(false);
 
 
     useEffect(() => {
@@ -43,22 +43,48 @@ const N_Vocabulary = () => {
         };
 
         fetchVerbs();
-    }, [dispatch, level, category]);
+    }, [dispatch, level, category, currentIndex]);
+
+    ///////////////////////////////////////////
+    useEffect(() => {
+
+        setTestVerbs([]);
+        setGuessVerbs([]);
+        setDroppedVerbs([]);
+        setIsCheckComplete(false);
+        setTestTaken(false);
+    }, [currentIndex]);
+
+
+    //////////////////////////////////////
+    const groupSize = calculateGroupSize(verbs.length);
 
     const displayVerbs = () => {
-        const startIndex = currentIndex * x;
-        const endIndex = startIndex + x;
+        const startIndex = currentIndex * groupSize;
+        const endIndex = startIndex + groupSize;
         return verbs.slice(startIndex, endIndex);
     };
 
+
+
+
     const handleTest = () => {
-        // Shuffle the regular verbs
-        const shuffledVerbs = shuffleVerbs(displayVerbs());
-        const shuffledGuess = shuffleVerbs(displayVerbs());
+        // const shuffledVerbs = shuffleVerbs(displayVerbs());
+        // const shuffledGuess = shuffleVerbs(displayVerbs());
+
+        const currentDisplayVerbs = displayVerbs();
+        const shuffledVerbs = shuffleVerbs([...currentDisplayVerbs]);
+        const shuffledGuess = shuffleVerbs([...currentDisplayVerbs]);
+
+
         // Display the shuffled verbs
         setTestVerbs(shuffledVerbs);
         setGuessVerbs(shuffledGuess);
+        setDroppedVerbs(Array(shuffledVerbs.length).fill(null)); // Reset droppedVerbs for the new test
+        setCellOccupancy(Array(shuffledVerbs.length).fill(false)); // Reset cell occupancy
+
         // Button test clicked
+        setIsCheckComplete(false);
         setTestTaken(true);
     };
 
@@ -68,32 +94,27 @@ const N_Vocabulary = () => {
         return shuffledArray;
     };
 
-    // const handleNext = () => {
-    //     setCurrentIndex(currentIndex + 1);
-    // };
-
-    // const handlePrevious = () => {
-    //     setCurrentIndex(currentIndex - 1);
-    // };
 
     const DraggableVerb = ({ verb, index }) => {
         const [{ isDragging }, drag] = useDrag({
-            type: ItemTypes.VERB, // Ensure ItemTypes.VERB is defined and has a valid value
-            item: { id: index },
+            type: ItemTypes.VERB,
+            item: { id: verb.id }, // Pass the verb ID as part of the item object
             collect: (monitor) => ({
                 isDragging: monitor.isDragging(),
             }),
         });
 
+        // Log the ID of the dragged verb
+        // console.log('Picked Verb ID:', verb.id);
+
         return (
-            <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1 }}>
+            <div ref={drag} className="draggable" style={{ opacity: isDragging ? 0.5 : 1 }}>
                 {verb.original}
             </div>
         );
     };
 
-
-    const DroppableCell = ({ index, onDrop }) => {
+    const DroppableCell = ({ index, onDrop, droppedVerb }) => {
         const [{ isOver }, drop] = useDrop({
             accept: ItemTypes.VERB,
             drop: (item) => onDrop(item.id, index), // Pass the dropped item ID and cell index to the onDrop handler
@@ -103,16 +124,101 @@ const N_Vocabulary = () => {
         });
 
         return (
-            <div ref={drop} style={{ backgroundColor: isOver ? 'lightgray' : 'transparent' }}>
-                {/* Empty cell */}
-            </div>
+            <td ref={drop} className="droppable" style={{ backgroundColor: isOver ? 'lightgray' : 'transparent' }}>
+                {droppedVerb && droppedVerb.original}
+            </td>
         );
     };
 
-    const handleDrop = (itemId, cellIndex) => {
-        // Perform actions when an item is dropped into a cell
-        console.log('Item dropped into cell:', itemId, cellIndex);
-        // Update the state or perform any other necessary operations
+
+    // Define a state variable to track the occupancy of each droppable cell
+    const [cellOccupancy, setCellOccupancy] = useState(Array(testVerbs.length).fill(false));
+
+
+    const handleDrop = (verbId, cellIndex) => {
+
+        // const guessVerbID = guessVerbs[cellIndex].id;
+        const answerId = testVerbs[cellIndex].id;
+        const droppedVerb = guessVerbs.find((verb) => verb.id === verbId); // verb object
+
+        console.log('Picked Verb ID:', verbId);
+        console.log('Destination Cell Index:', cellIndex);
+        console.log('List of Guess Verbs before drop:', guessVerbs);
+
+
+        const droppedVerbIndex = guessVerbs.findIndex((verb) => verb.id === verbId)
+        console.log("droppedVerbIndex", droppedVerbIndex)
+
+
+
+
+
+
+        // Update cellOccupancy to mark the cell as occupied
+        setCellOccupancy(prevOccupancy => {
+            const updatedOccupancy = [...prevOccupancy];
+            updatedOccupancy[cellIndex] = true;
+            console.log('setCellOccupancy', cellIndex)
+            return updatedOccupancy;
+        });
+
+        // Check if the cell is occupied based on cellOccupancy
+        if (cellOccupancy[cellIndex]) {
+            console.log('Cell is occupied. Cell Index:', cellIndex);
+            console.log('Verb not dropped.');
+            return;
+        } else {
+            setDroppedVerbs(prevDroppedVerbs => {
+                const newDroppedVerbs = [...prevDroppedVerbs];
+                newDroppedVerbs[cellIndex] = droppedVerb; // Store the verb object at the correct cell index
+                return newDroppedVerbs;
+            });
+
+        }
+
+        // Check if the verbId is already dropped
+        if (droppedVerbs.includes(verbId)) {
+            console.log('Verb is already dropped. Verb not dropped again.');
+            return;
+        }
+
+
+        // Update guessVerbs        
+        const updatedGuessVerbs = guessVerbs.filter((_, index) => {
+            return index !== droppedVerbIndex;
+        });
+        console.log('pickedVerbIndex', droppedVerbIndex);
+        setGuessVerbs(updatedGuessVerbs);
+
+        // Update droppedVerbs array
+        setDroppedVerbs(prevDroppedVerbs => [...prevDroppedVerbs, verbId]);
+        console.log('Guess Verbs after drop:', updatedGuessVerbs);
+    };
+
+
+    const handleCheck = () => {
+
+        const startIndex = currentIndex * groupSize;
+        const endIndex = Math.min(startIndex + groupSize, testVerbs.length);
+
+        for (let index = startIndex; index < endIndex; index++) {
+            // Adjusted index for droppedVerbs to correspond to current view
+            const adjustedIndex = index - startIndex;
+            if (droppedVerbs[adjustedIndex] && testVerbs[index] && droppedVerbs[adjustedIndex].meaning === testVerbs[index].meaning) {
+                console.log(`Correct Match at index ${index} (displayed index ${adjustedIndex}):`, droppedVerbs[adjustedIndex]);
+            } else {
+                console.log(`Incorrect Match at index ${index} (displayed index ${adjustedIndex})`);
+            }
+            setIsCheckComplete(true);
+        }
+    };
+
+
+    /////////////////////////////////////////
+
+
+    const handleNext = () => {
+        setCurrentIndex(prevIndex => prevIndex + 1);
     };
 
 
@@ -122,55 +228,61 @@ const N_Vocabulary = () => {
                 <MenuBar />
             </div>
             <div>
-                {/* Display regular verbs */}
-                {!testTaken && (
-                    <div>
-                        <h2>Regular Verbs</h2>
-                        <table>
-                            <tbody>
-                                {displayVerbs().map((verb, index) => (
-                                    <tr key={index}>
-                                        <td>{verb.original}</td>
-
-                                        <td>{verb.meaning}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-
-
-                        <button onClick={handleTest}>Test</button>
-                    </div>
-                )}
-
-                {/* Display shuffled verbs */}
-                {testVerbs.length > 0 && (
-                    <div>
-                        <h2>Shuffled Verbs</h2>
-                        <table>
-                            <tbody>
-                                {testVerbs.map((verb, index) => (
-                                    <tr key={index}>
-                                        <td>
-                                            {/* droppable comp. for {verb.original} */}
-                                            <DroppableCell index={index} onDrop={handleDrop} />
-                                        </td>
-                                        <td>{verb.meaning}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* New row with shuffled verb originals */}
+                < div className="table-container">
+                    {/* Display regular verbs */}
+                    {!testTaken && (
                         <div>
-                            {/* draggable comp. */}
-                            {guessVerbs.map((verb, index) => (
-                                <DraggableVerb key={index} verb={verb} index={index} />
-                            ))}
+                            <h2>Regular Verbs</h2>
+                            <table>
+                                <tbody>
+                                    {displayVerbs().map((verb, index) => (
+                                        <tr key={index}>
+                                            <td>{verb.original}</td>
+
+                                            <td>{verb.meaning}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+
+
+                            <button onClick={handleTest}>Test</button>
                         </div>
-                        {/* Button to check the shuffled verbs */}
-                        <button>Check</button>
-                    </div>
-                )}
+                    )}
+
+                    {/* Display shuffled verbs */}
+                    {testVerbs.length > 0 && (
+                        <div>
+                            <h2>Shuffled Verbs</h2>
+                            <table>
+                                <tbody>
+                                    {testVerbs.map((verb, index) => (
+                                        <tr key={index}>
+                                            <td>
+                                                {/* droppable comp. for {verb.original} */}
+                                                <DroppableCell index={index} onDrop={handleDrop} droppedVerb={droppedVerbs[index]} />
+                                            </td>
+                                            <td>{verb.meaning}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {/* New row with shuffled verb originals */}
+                            <div>
+                                {/* draggable comp. */}
+                                {guessVerbs.map((verb, index) => (
+                                    <DraggableVerb key={index} verb={verb} index={index} />
+                                ))}
+                            </div>
+                            {/* Button to check the shuffled verbs */}
+                            {!isCheckComplete ? (
+                                <button onClick={handleCheck} disabled={guessVerbs.length > 0}>Check</button>
+                            ) : (
+                                <button onClick={handleNext}>Next</button>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
         </BasicLayout>
     );
