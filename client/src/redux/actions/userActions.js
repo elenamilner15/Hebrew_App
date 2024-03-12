@@ -12,17 +12,22 @@ export const login = (formData) => {
 
             if (success) {
                 const userProfile = await fetchUserProfile(`/profile/${formData.username}`);
-                console.log(userProfile)
+                console.log('User Profile:', userProfile);
 
 
                 // Save user data and token to localStorage
-                localStorage.setItem('user', JSON.stringify({ isLoggedIn: true, username: formData.username }));
+                localStorage.setItem('user', JSON.stringify({ isLoggedIn: true, username: formData.username, id: userProfile.id }));
                 localStorage.setItem('token', userProfile.token);
 
 
 
                 // Dispatch actions to update user data and profile
-                dispatch(setUserData({ isLoggedIn: true, username: formData.username }));
+                dispatch(setUserData({
+                    isLoggedIn: true,
+                    username: formData.username,
+                    id: userProfile.id,  // Include the user ID
+                    ...userProfile  // Spread the user profile data
+                }));
                 dispatch(updateProfile(userProfile));
             }
 

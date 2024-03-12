@@ -8,8 +8,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/actions/userActions.js';
 
 const MenuBar = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();   
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    
 
     const navigate = useNavigate();
     const [showLogin, setShowLogin] = useState(false);

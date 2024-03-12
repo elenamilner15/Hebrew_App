@@ -13,6 +13,43 @@ import MenuBar from './MenuBar2.js';
 function L_Vocabulary() {
     const navigate = useNavigate();
     const [selectedLevel, setSelectedLevel] = useState('1');
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+
+    // Mapping of levels to available categories
+    const levelToCategories = {
+        '1': ['1', '2', '3', '4', '5', '6', '7', '9', '13'],
+        '2': ['1', '2', '3', '4', '5', '6', '8', '9'],
+        '3': [] // No categories available for level 3 now
+    };
+
+    // Mapping of categories to available levels
+    const categoryToLevels = {
+        '1': ['1', '2'],
+        '2': ['1', '2'],
+        '3': ['1', '2'],
+        '4': ['1', '2'],
+        '5': ['1', '2'],
+        '6': ['1', '2'],
+        '7': ['1'],
+        '8': ['2'],
+        '9': ['1', '2'],
+        '13': ['1'],
+    };
+
+    const categoryNames = {
+        '1': 'Everyday Routine',
+        '2': 'Movement',
+        '3': 'Emotional',
+        '4': 'Intellectual',
+        '5': 'Social',
+        '6': 'Commerce',
+        '7': 'Hobby',
+        '8': 'Adjective',
+        '9': 'Occupational',
+        '13': 'Medical',
+    };
+
 
 
     // const { content, level } = useParams();
@@ -21,79 +58,44 @@ function L_Vocabulary() {
     };
 
     const handleCatClick = (category) => {
+        setSelectedCategory(category);
         navigate(`/vocabulary/${selectedLevel}/${category}`);
     };
-
 
     return (
         <BasicLayout>
             <div className="page">
-
                 <MenuBar />
                 <div className="explevel">
                     <div className="borderlevel">
-                        <div className={`level ${selectedLevel === '1' ? 'active' : ''}`} onClick={() => handleLevelClick('1')}>
-                            <p>Beginner</p>
-                        </div>
-                        <div className={`level ${selectedLevel === '2' ? 'active' : ''}`} onClick={() => handleLevelClick('2')}>
-                            <p>Advanced</p>
-                        </div>
-                        <div className={`level ${selectedLevel === '3' ? 'active' : ''}`} onClick={() => handleLevelClick('3')}>
-                            <p>Expert</p>
-                        </div>
+                        {Object.keys(levelToCategories).map((level) => (
+                            <div key={level} className={`level ${selectedLevel === level ? 'active' : ''}`} onClick={() => handleLevelClick(level)}>
+                                <p>{level === '1' ? 'Beginner' : level === '2' ? 'Advanced' : 'Expert'}</p>
+                            </div>
+                        ))}
                     </div>
-
                 </div>
-
                 <div className="categories">
-
-                    <div className="cat c1" onClick={() => handleCatClick('1')}>
-                        <p>Everyday Routine</p>
-                    </div>
-
-                    <div className="cat c2" onClick={() => handleCatClick('2')}>
-                        <p>Movement</p>
-                    </div>
-
-                    <div className="cat c3" onClick={() => handleCatClick('3')}>
-                        <p>Emotional</p>
-                    </div>
-
-                    <div className="cat c4" onClick={() => handleCatClick('4')}>
-                        <p>Intellectual</p>
-                    </div>
-
-                    <div className="cat c5" onClick={() => handleCatClick('5')}>
-                        <p>Social</p>
-                    </div>
-
-                    <div className="cat c6" onClick={() => handleCatClick('6')}>
-                        <p>Commerce</p>
-                    </div>
-
-                    <div className="cat c7" onClick={() => handleCatClick('7')}>
-                        <p>Hobby</p>
-                    </div>
-
-                    <div className="cat c8" onClick={() => handleCatClick('8')}>
-                        <p>Adjective</p>
-                    </div>
-
-
-                    <div className="cat c9" onClick={() => handleCatClick('9')}>
-                        <p>Occupational</p>
-                    </div>
-
-
-                    <div className="cat c13" onClick={() => handleCatClick('13')}>
-                        <p>Medical</p>
-                    </div>
-
-
+                    {selectedCategory ? (
+                        categoryToLevels[selectedCategory]?.map((level) => (
+                            <div key={level} className={`cat c${level}`} onClick={() => handleLevelClick(level)}>
+                                <p>{level}</p>
+                            </div>
+                        ))
+                    ) : (
+                        levelToCategories[selectedLevel]?.length > 0 ? (
+                            levelToCategories[selectedLevel].map((category) => (
+                                <div key={category} className={`cat c${category}`} onClick={() => handleCatClick(category)}>
+                                    <p>{categoryNames[category]}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>This level will be available soon</p>
+                        )
+                    )}
                 </div>
-
             </div>
-        </BasicLayout >
+        </BasicLayout>
     );
 }
 

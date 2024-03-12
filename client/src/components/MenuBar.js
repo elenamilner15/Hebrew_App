@@ -19,14 +19,9 @@ const MenuBar = () => {
     const [showLogin, setShowLogin] = useState(false);
     const [previousPath, setPreviousPath] = useState(null); //previous path
 
-    //______________________
-    // useEffect(() => {
-    //     if (isLoggedIn) {
-    //         setShowLogin(false);
-    //     }
-    // }, [isLoggedIn, dispatch]);
 
-    console.log('Is logged in:', isLoggedIn); // Log the login state
+
+    // console.log('Is logged in:', isLoggedIn); // Log the login state
 
 
     const handleLogout = async () => {
@@ -67,7 +62,7 @@ const MenuBar = () => {
             <div className="language-list">
                 <LanguageDropdown />
             </div>
-            <div className="abc">
+            <div className="acc">
                 {isLoggedIn ? (
                     // <AccountDropdown />
                     <AccountDropdown onLogout={() => handleLogout()} />

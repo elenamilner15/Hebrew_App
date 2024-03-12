@@ -25,7 +25,7 @@ export const fetchData = async (path, part_of_speech) => {
 // Function to fetch Infinitive
 export const fetchInfinitive = async (level, category) => {
     const apiUrl = `${serverUrl}/verbs/infinitive/${level}/${category}`;
-    console.log('apiUrl 2', apiUrl)
+    // console.log('apiUrl 2', apiUrl)
     try {
         const response = await fetch(apiUrl);
 
@@ -34,7 +34,7 @@ export const fetchInfinitive = async (level, category) => {
         }
 
         const data = await response.json();
-        console.log('DATA', data);
+        // console.log('DATA', data);
         return data;
 
     } catch (error) {
@@ -46,9 +46,36 @@ export const fetchInfinitive = async (level, category) => {
 
 
 // client/src/api.js
+// Function to create user progress
+// export const createUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
+//     console.log('API Payload for creating progress:', { user_id, verb_id, tense, score, attempts });
+//     const apiUrl = `${serverUrl}/user/create`;
+
+//     try {
+//         const response = await fetch(apiUrl, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({ user_id, verb_id, tense, score, attempts }),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Failed to create user progress');
+//         }
+
+//         const result = await response.json();
+//         return result;
+//     } catch (error) {
+//         console.error('Error creating user progress:', error);
+//         throw error;
+//     }
+// };
+
 // Function to update user progress
 export const updateUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
-    const apiUrl = `${serverUrl}/updateUserProgress`;
+    console.log('API Payload:', { user_id, verb_id, tense, score, attempts });
+    const apiUrl = `${serverUrl}/user/update`;
 
     console.log('apiUrl', apiUrl)
     try {

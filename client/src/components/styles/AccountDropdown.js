@@ -14,6 +14,7 @@ function AccountDropdown({ userOptions, handleUserAction, onLogout }) {
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const username = useSelector((state) => state.user.username);
 
+
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };

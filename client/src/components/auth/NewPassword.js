@@ -42,43 +42,6 @@ function NewPassword() {
             return;
         }
 
-        //     try {
-        //         console.log('Submitting passwordInput:', passwordInput);
-        //         console.log(passwordInput);
-        //         console.log(resetToken);
-
-        //         const success = await dispatch(newPassword(passwordInput, resetToken));//
-
-        //         console.log('After dispatching setNewPassword action');
-
-        //         if (success) {
-        //             const { user } = success.payload; // Retrieve the user object from the payload
-        //             console.log('Password is set successfully for user:', user.username);
-
-
-
-
-        //             // Dispatch the login action to log in the user
-        //             await dispatch(login({ username: user.username, password: passwordInput }));//
-
-        //             // Clear the resetToken in the Redux store
-        //             dispatch(clearResetToken());
-
-        //             // Redirect the user to the home page
-        //             navigate('/');
-
-
-
-
-        //         } else {
-        //             console.log('Password setting failed');
-        //         }
-
-        //     } catch (error) {
-        //         console.error('Error during newPassword:', error);
-        //     }
-        // };
-
 
 
         try {

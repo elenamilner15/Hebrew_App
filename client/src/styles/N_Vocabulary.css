@@ -8,48 +8,34 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-
     margin-top: 20px;
     margin-left: -12px;
     margin-right: -12px;
-
 }
 
 table {
     border-collapse: collapse;
     min-width: 400px;
     width: 700px;
-
     margin-bottom: 20px;
+
 }
 
 th,
 td {
-    border: 1px solid #ddd;
-    /* padding: 8px; */
     text-align: left;
-    height: 40px;
-}
+    height: 50px;
+    font-size: 24px;
 
-
-td {
-    min-width: 80px;
 
 }
 
+/* td {
+    min-width: 100px;
+} */
 
 th {
     background-color: #f2f2f2;
-}
-
-.selected {
-    cursor: pointer;
-}
-
-.selected:hover {
-    background-color: yellow;
-    /* Change to your desired color */
-    cursor: pointer;
 }
 
 button {
@@ -67,43 +53,150 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* Draggable container styles */
+/* .draggable-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+} */
 
-/* ////////////////////// */
-
-/* Define styles for the list container */
-ul {
-    list-style-type: none;
-    /* Remove default list styling */
-    padding: 0;
+.draggable-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+    min-height: 40px;
+    /* Adjust this value as needed to match the height of the container when it's filled with verbs */
 }
 
-/* Define styles for each list item */
-li {
-    padding: 8px 0;
-    /* Add padding to separate each item */
-    border-bottom: 1px solid #ccc;
-    /* Add a bottom border to separate items */
-}
-
-/* Style for the last item to remove bottom border */
-li:last-child {
-    border-bottom: none;
-    /* Remove bottom border for the last item */
-}
-
-/* Define styles for draggable elements */
+/* Draggable verb card styles */
 .draggable {
-    cursor: move;
-    /* Set cursor to indicate draggable */
-    /* Add any other styles as needed */
+    padding: 10px 15px;
+    background-color: #86B6F6;
+
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 24px;
+
 }
 
+/* Styles for selected verb card */
+.verb-selected {
+    background-color: #007bff;
+    color: #fff;
+}
 
+/* Styles for droppable cells */
 td.droppable {
-    border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
+}
 
+.correct {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.incorrect {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.correct-answer {
+    padding-left: 40px;
+    width: 130px;
+    min-width: 130px;
+    color: #28a745;
+}
+
+table tr td:first-child {
+    min-width: 130px;
+    width: 130px;
+}
+
+
+.empty-cell {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.answer-dragged {
+    background-color: #86B6F6;
+    cursor: pointer;
+
+}
+
+.verb-meaning {
+    padding-left: 20px;
+}
+
+
+h2 {
+    background-color: #C7DCA7;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.button-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.verb-button {
+    background-color: #86B6F6;
+    color: black;
+    font-family: Nunito, arial, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    /* Change cursor to pointer on hover */
+
+    /* margin-bottom: 20px;   
+    margin-right: 10px;    */
+
+}
+
+.verb-button:hover {
+    background-color: #007bff;
+}
+
+.verb-button:disabled {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+
+.congrats-message {
+    text-align: center;
+    margin-top: 20px;
+    animation: fadeIn 2s;
+}
+
+.congrats-message div {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

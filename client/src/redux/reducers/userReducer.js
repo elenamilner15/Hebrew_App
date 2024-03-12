@@ -1,8 +1,9 @@
 // client\src\redux\reducers\userReducer.js
 const initialState = {
-    username: '', // Initial state for the username
-    email: '',    // Initial state for the email
-    password: '',    // Initial state for the email
+    id: null,       // Initial state for the user ID
+    username: '',   // Initial state for the username
+    email: '',      // Initial state for the email
+    password: '',   // Initial state for the email
 
     profile: {
         score: null,
@@ -19,6 +20,7 @@ const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'SET_USER_DATA':
             return { ...state, ...action.payload };
+
         case 'UPDATE_PROFILE':
             return { ...state, profile: { ...state.profile, ...action.payload } };
 
