@@ -3,7 +3,7 @@ const db = require('../database/connection');
 
 
 // Function to get user progress
-const getUserProgress = async (userId) => {
+const getUserProgress = async (user_id) => {
     try {
         const progress = await db.any(
             `
@@ -19,7 +19,7 @@ const getUserProgress = async (userId) => {
             JOIN verbs v ON up.verb_id = v.id
             WHERE up.user_id = $1;
             `,
-            [userId]
+            [user_id]
         );
         return progress;
     } catch (error) {
@@ -27,45 +27,28 @@ const getUserProgress = async (userId) => {
     }
 };
 
-// Function to create user progress
-const createUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
-    try {
-        const newprogress = await db.one(
-            `
-            INSERT INTO userprogress (user_id, verb_id, tense, score, attempts, last_attempted_at)
-            VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
-            RETURNING *;
-            `,
-            [user_id, verb_id, tense, score, attempts]
-        );
-        return newprogress;
-    } catch (error) {
-        throw error;
-    }
-};
 
-// Function to update user progress
 const updateUserProgress = async ({ user_id, verb_id, tense, score, attempts }) => {
     try {
-        const updateprogress = await db.oneOrNone(
+        const updatedProgress = await db.oneOrNone(
             `
             INSERT INTO userprogress (user_id, verb_id, tense, score, attempts, last_attempted_at)
             VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
             ON CONFLICT (user_id, verb_id, tense)
-            DO UPDATE SET score = EXCLUDED.score, attempts = EXCLUDED.attempts, last_attempted_at = CURRENT_TIMESTAMP
+            DO UPDATE SET score = userprogress.score + $4, attempts = userprogress.attempts + $5, last_attempted_at = CURRENT_TIMESTAMP
             RETURNING *;
             `,
             [user_id, verb_id, tense, score, attempts]
         );
-        return updateprogress;
+        return updatedProgress;
     } catch (error) {
         throw error;
     }
 };
 
+
 module.exports = {
     getUserProgress,
-    createUserProgress,
     updateUserProgress,
 
 };

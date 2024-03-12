@@ -32,6 +32,7 @@ const getUserProfile = async (username) => {
             `
             SELECT
               id,
+              username,
               email,
               score          
             FROM users

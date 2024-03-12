@@ -1,6 +1,8 @@
 // server\controllers\verbController.js
 const Verb = require('../models/Verb');
 const db = require('../database/connection');
+const Userprogress = require('../models/Userprogress');
+
 const calculateGroups = require('../utils/calculateGroups');
 
 exports.getInfinitive = async (req, res) => {
@@ -30,7 +32,7 @@ exports.countInfinitive = async (req, res) => {
 exports.updateUserProgressController = async (req, res) => {
     const { user_id, verb_id, tense, score, attempts } = req.body;
     try {
-        const progress = await updateUserProgress({ user_id, verb_id, tense, score, attempts });
+        const progress = await Userprogress.updateUserProgress({ user_id, verb_id, tense, score, attempts });
         res.status(200).json({ progress });
     } catch (error) {
         console.error('Error updating user progress:', error);

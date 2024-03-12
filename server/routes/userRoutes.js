@@ -9,7 +9,7 @@ const userController = require('../controllers/userController');
 
 
 // Define a GET route to fetch user profile by username
-router.get('/userId', userController.getUserprogress);
+router.get('/user_id', userController.getUserprogress);
 router.post('/update', userController.updateUserProgress);
 router.post('/create', userController.createUserProgress);
 
