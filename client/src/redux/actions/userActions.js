@@ -138,6 +138,10 @@ export const newPassword = (formData, resetToken) => {
                 const { user } = response.data; // Retrieve the user object from the payload
                 console.log('Password changed successfully for user:', user.username);
 
+                // Dispatch the clearResetToken action to update Redux state
+                dispatch(clearResetToken());
+
+
                 dispatch({
                     type: 'NEW_PASSWORD',
                     payload: { user },

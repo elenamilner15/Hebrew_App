@@ -1,136 +1,134 @@
 //client\src\components\MainContent.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { useParams } from 'react-router-dom';
 import { fetchData } from '../api';
+
 import BasicLayout from '../layouts/BasicLayout';
-import '../styles/MainContent.css';
+import '../styles/L_Grammar.css';
+import MenuBar2 from './MenuBar2.js';
+import { fetchProgressForLevel, fetchTotalPresent1 } from '../redux/actions/verbsActions';
 
 
-
-function MainContent() {
+function L_Grammar() {
 
     const { content, level } = useParams();
     const [contentData, setContentData] = useState([]);
     const [showContent, setShowContent] = useState(false); // State to track button click
+    /////////////////////////
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [selectedLevel, setSelectedLevel] = useState(localStorage.getItem('selectedLevel') || '1'); // Retrieve the selected level from local storage or default to '1'
+    const [selectedTense, setSelectedTense] = useState(null);
+    const [selectedBinian, setSelectedBinian] = useState(null);
 
-    const [part_of_speech, setPartOfSpeech] = useState(null); // based on button click
-
-    const goToPaal = () => {
-        setPartOfSpeech('paal'); // Set part_of_speech to 'paal'
-        setShowContent(false); // Reset showContent when changing part_of_speech
+    const tenses = {
+        '1': 'Present',
+        '2': 'Past',
+        '3': 'Future',
+        '4': 'Imperative',
     };
 
-    const goToPiel = () => {
-        setPartOfSpeech('piel'); // Set part_of_speech to 'piel'
-        setShowContent(false); // Reset showContent when changing part_of_speech
+    // const binians = {
+    //     '1': 'Paal',
+    //     '2': 'Piel',
+    //     '3': 'Hifil',
+    //     '4': 'Hitpael',
+    //     '5': 'Nifal',
+    // };
+
+    // const { content, level } = useParams();
+    const handleLevelClick = (level) => {
+        setSelectedLevel(level);
+        localStorage.setItem('selectedLevel', level);
+
     };
 
-    const goToHifil = () => {
-        setPartOfSpeech('hifil'); // Set part_of_speech to 'piel'
-        setShowContent(false); // Reset showContent when changing part_of_speech
+    const handleTenseClick = (tense) => {
+        setSelectedTense(tense);
+        console.log("Selected Tense before navigation:", tense);
+
+
+        // localStorage.setItem('selectedTense', tense);
+
+        // dispatch(fetchProgressForLevel(user_id, level, tense));
+        // dispatch(fetchTotalPresent1(level));
+        console.log("navigate", `/grammar/${selectedLevel}/${tense}`)
+        navigate(`/grammar/${selectedLevel}/${tense}`);
     };
 
-    const goToHitpael = () => {
-        setPartOfSpeech('hitpael'); // Set part_of_speech to 'piel'
-        setShowContent(false); // Reset showContent when changing part_of_speech
-    };
 
-    const goToNifal = () => {
-        setPartOfSpeech('nifal'); // Set part_of_speech to 'piel'
-        setShowContent(false); // Reset showContent when changing part_of_speech
-    };
+
+
+
+    const user_id = useSelector((state) => state.user.id);
+    console.log('User ID:', user_id);
+
+    const progressData = useSelector((state) => state.verbs.progressData);
+    const totalPresent1 = useSelector((state) => state.verbs.totalPresent1);
+
 
 
 
 
     useEffect(() => {
-        fetchData(`/verbs/present/${level}`, part_of_speech)
-            .then((data) => {
-                console.log("Received data:", data);
-                setContentData(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching content:', error);
-            });
-    }, [content, level, part_of_speech]);
-
-    // Function to handle the "Start" button click
-    const handleStartClick = () => {
-        setShowContent(true);
-    };
-
-
-    // Define labels for different content options
-    const contentLabels = {
-        present: "Present Tense",
-        past: "Past Tense",
-        future: "Future Tense",
-        imperative: "Imperative",
-        infinitive: "Infinitive",
-    };
-
-    // Determine the appropriate label based on content
-    const contentLabel = contentLabels[content] || "Content";
+        dispatch(fetchProgressForLevel(user_id, selectedLevel, selectedTense));
+        dispatch(fetchTotalPresent1(selectedLevel, selectedTense));
+    }, [dispatch, user_id, selectedLevel, selectedTense]);
 
     return (
         <BasicLayout>
-            <div>
-
-                <div className="menu-bar">
-
-                    <div className="button-container">
-                        <button className="button" onClick={goToPaal}>
-                            Paal
-                        </button>
-                        <button className="button" onClick={goToPiel}>
-                            Piel
-                        </button>
-                        <button className="button" onClick={goToHifil}>
-                            Hifil
-                        </button>
-                        <button className="button" onClick={goToHitpael}>
-                            Hitpael
-                        </button>
-                        <button className="button" onClick={goToNifal}>
-                            Nifal
-                        </button>
-                    </div>
-                </div>
-
-                {/* Container element for the course block */}
-                <div className="course-container">
-                    <div className="course-block">
-                        <h2> Level {level} </h2>
-                        <h2> Learn {contentLabel}</h2>
-                        <div id="uppercase">
-                            <h2>{part_of_speech}</h2>
-                        </div>
-
-                    </div>
-                </div>
-
-
-                {/* Render the "Start" button */}
-                <button onClick={handleStartClick}>Start</button>
-
-                {/* Conditionally render the contentData when the button is clicked */}
-                {showContent && (
-                    <ul>
-                        {contentData.map((item, index) => (
-                            <li key={index}>
-                                <div>Meaning: {item.meaning}</div>
-                                <div>Root: {item.root}</div>
-                                <div>ap_ms: {item.ap_ms}</div>
-                                <div>ap_ms_trans: {item.ap_ms_trans}</div>
-                                {/* Render other properties as needed */}
-                            </li>
+            <div className="page">
+                <MenuBar2 />
+                <div className="expmenu">
+                    <div className="borderlevel">
+                        {['1', '2', '3'].map((level) => (
+                            <div key={level} className={`level ${selectedLevel === level ? 'active' : ''}`} onClick={() => handleLevelClick(level)}>
+                                <p>{level === '1' ? 'Beginner' : level === '2' ? 'Advanced' : 'Expert'}</p>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
+
+                    {/* <div className="borderbinian">
+                        {Object.keys(binians).map((binian) => (
+                            <div key={binian} className={`binian ${binian}`} onClick={() => handleBinianClick(binian)}>
+                                <p>{binians[binian]}</p>
+                            </div>
+                        ))}
+                    </div> */}
+
+                </div>
+
+                {progressData && (
+                    <div className="progress-info">
+                        <div className="progress-text">
+                            <p>Progress</p>
+                        </div>
+                        <div className="progress-bar-container">
+                            <div
+                                className="progress-bar"
+                                style={{ width: `${(progressData.correctPresent1 / totalPresent1) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
                 )}
+
+                <div className="tenses">
+                    {Object.keys(tenses).map((tense) => (
+                        <div key={tense} className={`tense t${tense}`} onClick={() => handleTenseClick(tense)}>
+                            <p>{tenses[tense]}</p>
+                        </div>
+                    ))}
+                </div>
+
+
+
             </div>
         </BasicLayout>
     );
 }
 
-export default MainContent;
+export default L_Grammar;

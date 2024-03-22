@@ -1,18 +1,21 @@
 //client\src\components\L_Vocabulary.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchData } from '../api';
+// import { fetchData } from '../api';
 import BasicLayout from '../layouts/BasicLayout';
 import '../styles/MainContent.css';
 import Cookies from 'js-cookie';
 
 import '../styles/L_Vocabulary.css';
-import MenuBar from './MenuBar2.js';
+import MenuBar2 from './MenuBar2.js';
+import { fetchProgressForLevel, fetchTotalInfinitive } from '../redux/actions/verbsActions';
 
 function L_Vocabulary() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [selectedLevel, setSelectedLevel] = useState('1');
+    const [selectedLevel, setSelectedLevel] = useState(localStorage.getItem('selectedLevel') || '1'); // Retrieve the selected level from local storage or default to '1'
     const [selectedCategory, setSelectedCategory] = useState(null);
 
 
@@ -50,22 +53,44 @@ function L_Vocabulary() {
         '13': 'Medical',
     };
 
-
+    const tense = 'inf';
 
     // const { content, level } = useParams();
     const handleLevelClick = (level) => {
         setSelectedLevel(level);
+        localStorage.setItem('selectedLevel', level); // Store the selected level in local storage
+        dispatch(fetchProgressForLevel(user_id, level, tense));
+        dispatch(fetchTotalInfinitive(level));
     };
+
+
 
     const handleCatClick = (category) => {
         setSelectedCategory(category);
         navigate(`/vocabulary/${selectedLevel}/${category}`);
     };
 
+
+    const user_id = useSelector((state) => state.user.id);
+    console.log('User ID:', user_id);
+
+    const progressData = useSelector((state) => state.verbs.progressData);
+    const totalInfinitive = useSelector((state) => state.verbs.totalInfinitive);
+
+    useEffect(() => {
+        // console.log('Dispatching fetchProgressForLevel with:', user_id, selectedLevel, tense);
+        dispatch(fetchProgressForLevel(user_id, selectedLevel, tense));
+        dispatch(fetchTotalInfinitive(selectedLevel));
+    }, [dispatch, user_id, selectedLevel]);
+
+    console.log('totalInfinitive from Redux store:', totalInfinitive); // Add this log
+
+    // console.log('Correct Infinitive:', progressData?.correctInfinitive);
+
     return (
         <BasicLayout>
             <div className="page">
-                <MenuBar />
+                <MenuBar2 />
                 <div className="explevel">
                     <div className="borderlevel">
                         {Object.keys(levelToCategories).map((level) => (
@@ -75,6 +100,25 @@ function L_Vocabulary() {
                         ))}
                     </div>
                 </div>
+
+
+                {progressData && (
+                    <div className="progress-info">
+                        {/* <p>{progressData.correctInfinitive}</p> */}
+                        <div className="progress-text">
+                            <p>Progress</p>
+                        </div>
+                        <div className="progress-bar-container">
+                            <div
+                                className="progress-bar"
+                                style={{
+                                    width: `${(progressData.correctInfinitive / totalInfinitive) * 100}%`,
+                                }}
+                            ></div>
+                        </div>
+                    </div>
+                )}
+
                 <div className="categories">
                     {selectedCategory ? (
                         categoryToLevels[selectedCategory]?.map((level) => (

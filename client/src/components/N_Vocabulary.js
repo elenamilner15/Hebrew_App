@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
-import { fetchInfinitive, fetchInfinitiveShuffled, updateUserProgress } from '../redux/actions/verbsActions';
+import { fetchInfinitive, updateUserProgress } from '../redux/actions/verbsActions';
 import '../styles/N_Vocabulary.css';
-import MenuBar from './MenuBar2.js';
+import MenuBar2 from './MenuBar2.js';
 import BasicLayout from '../layouts/BasicLayout';
 import '../styles/MainContent.css';
 import { calculateGroupSize } from '../utils/utils';
@@ -79,6 +79,8 @@ const N_Vocabulary = () => {
 
     //////////////////////////////////////
     const groupSize = calculateGroupSize(verbs.length);
+    console.log('verbs.length', verbs.length)//
+    console.log('groupSize', groupSize)//
 
     const displayVerbs = () => {
         const startIndex = currentIndex * groupSize;
@@ -302,14 +304,16 @@ const N_Vocabulary = () => {
     return (
         <BasicLayout>
             <div className="page">
-                <MenuBar />
+                <MenuBar2 />
             </div>
             <div>
                 <div className="table-container">
                     {/* Display regular verbs */}
                     {!testTaken && (
                         <div>
-                            <h2>Read and try to remember these verbs</h2>
+                            <div className="N-header">
+                                Read and try to remember these verbs
+                            </div>
                             <table>
                                 <tbody>
                                     {displayVerbs().map((verb, index) => (

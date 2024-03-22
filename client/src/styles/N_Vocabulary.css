@@ -30,37 +30,16 @@ td {
 
 }
 
-/* td {
-    min-width: 100px;
-} */
-
 th {
     background-color: #f2f2f2;
 }
 
-button {
-    margin-right: 10px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
+
 
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-
-/* Draggable container styles */
-/* .draggable-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-} */
 
 .draggable-container {
     display: flex;
@@ -69,7 +48,6 @@ button:disabled {
     justify-content: center;
     margin-bottom: 20px;
     min-height: 40px;
-    /* Adjust this value as needed to match the height of the container when it's filled with verbs */
 }
 
 /* Draggable verb card styles */
@@ -136,12 +114,18 @@ table tr td:first-child {
 }
 
 
-h2 {
+.N-header {
     background-color: #C7DCA7;
     color: black;
+    margin: 20px 0px;
     padding: 10px;
     border-radius: 5px;
     text-align: center;
+
+    font-family: Nunito, arial, sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
 }
 
 .button-container {
@@ -155,6 +139,7 @@ h2 {
 .verb-button {
     background-color: #86B6F6;
     color: black;
+    border: none;
     font-family: Nunito, arial, sans-serif;
     font-size: 24px;
     font-style: normal;

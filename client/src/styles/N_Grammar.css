@@ -1,4 +1,4 @@
-.explevel {
+/* .explevel {
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -13,9 +13,7 @@
     min-width: 360px;
     height: 60px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    /* flex-wrap: wrap; */
-    /* flex-wrap: nowrap; */
+    display: flex;    
     border-radius: 12px;
 }
 
@@ -26,9 +24,7 @@
 
     box-sizing: border-box;
     display: flex;
-    /* flex-wrap: nowrap; */
-    /* flex-wrap: wrap; */
-
+   
     width: 220px;
     height: 60px;
     justify-content: center;
@@ -77,7 +73,7 @@
     margin-right: 20px;
 }
 
-.categories {
+.binian s {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
@@ -90,7 +86,7 @@
 
 
 
-.cat {
+.binian {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,64 +103,36 @@
     transition: transform 0.2s ease;
 }
 
-.cat p {
+.binian p {
     font-weight: bold;
     font-size: 26px;
     margin-bottom: 20px;
 }
 
-.cat:hover {
+.binian:hover {
     transform: translateY(-10px);
 }
 
 
 
-.c1 {
-    background: #FFEBD8 url('pic/icons/cat1.png') center/cover no-repeat;
-    background-size: 80%;
+.b1 {
+    background: #FFEBD8 url('pic/icons/tn1.png') bottom/cover no-repeat;
+    background-size: 95%;
 }
 
-.c2 {
-    background: #FFEBD8 url('pic/icons/cat23.png') center/cover no-repeat;
-    background-size: 80%;
+.b2 {
+    background: #FFEBD8 url('pic/icons/tn2.png') bottom/cover no-repeat;
+    background-size: 75%;
 }
 
-.c3 {
-    background: #FFEBD8 url('pic/icons/cat3.png') center/cover no-repeat;
-    background-size: 80%;
+.b3 {
+    background: #FFEBD8 url('pic/icons/tn3.png') bottom/cover no-repeat;
+    background-size: 90%;
 }
 
-.c4 {
-    background: #FFEBD8 url('pic/icons/cat44.png') center/cover no-repeat;
-    background-size: 80%;
-}
+.b4 {
+    background: #FFEBD8 url('pic/icons/tn4.png') bottom/cover no-repeat;
+    background-size: 64%;
 
-.c5 {
-    background: #FFEBD8 url('pic/icons/cat5.png') center/cover no-repeat;
-    background-size: 80%;
-}
 
-.c6 {
-    background: #FFEBD8 url('pic/icons/cat6.png') center/cover no-repeat;
-    background-size: 80%;
-}
-
-.c7 {
-    background: #FFEBD8 url('pic/icons/cat7.png') center/cover no-repeat;
-    background-size: 80%;
-}
-
-.c8 {
-    background: #FFEBD8 url('pic/icons/cat8.png') center/cover no-repeat;
-    background-size: 80%;
-}
-
-.c9 {
-    background: #FFEBD8 url('pic/icons/cat9.png') center/cover no-repeat;
-    background-size: 80%;
-}
-
-.c13 {
-    background: #FFEBD8 url('pic/icons/cat13.png') center/cover no-repeat;
-    background-size: 80%;
-}
+} */

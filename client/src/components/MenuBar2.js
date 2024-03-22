@@ -7,10 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/actions/userActions.js';
 
-const MenuBar = () => {
-    const dispatch = useDispatch();   
+const MenuBar2 = () => {
+    const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    
+
 
     const navigate = useNavigate();
     const [showLogin, setShowLogin] = useState(false);
@@ -74,4 +74,4 @@ const MenuBar = () => {
     );
 };
 
-export default MenuBar;
+export default MenuBar2;
