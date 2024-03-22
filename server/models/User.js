@@ -80,7 +80,9 @@ const findUserByResetToken = async (resetToken) => {
 
 const updateUserPassword = async (email, hashedPassword) => {
     try {
-        await db.none('UPDATE users SET password = $1 WHERE email = $2', [hashedPassword, email]);
+        await db.none('UPDATE users SET password = $1, reset_token = NULL, reset_token_expiration = NULL WHERE email = $2',
+            [hashedPassword, email]
+        );
     } catch (error) {
         throw error;
     }

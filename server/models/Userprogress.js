@@ -46,9 +46,61 @@ const updateUserProgress = async ({ user_id, verb_id, tense, score, attempts }) 
     }
 };
 
+//////////////////////////////////////////////////////////////////////////////
+// INFINITIVE PROGRESS //
+//////////////////////////////////////////////////////////////////////////////
+// server\models\Userprogress.js
+const progressForLevel = async (user_id, level, tense) => {
+    try {
+        let levelRange;
+        if (level === '1') {
+            levelRange = [1, 2, 3];
+        } else if (level === '2') {
+            levelRange = [4, 5];
+        } else {
+            throw new Error('Invalid level');
+        }
+
+        const progressInf = await db.oneOrNone(
+            `SELECT COUNT(*)
+            FROM userprogress
+            JOIN verbs ON userprogress.verb_id = verbs.id
+            WHERE userprogress.user_id = $1 
+            AND verbs.level = ANY($2) 
+            AND verbs.level2 = 1
+            AND  userprogress.tense = $3
+            AND  userprogress.score > 0`,
+            [user_id, levelRange, tense]
+        );
+        return progressInf;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// const progressForLevel = async (user_id, tense) => {
+//     try {    
+//         const progressInf = await db.one(
+//             `SELECT COUNT(*)
+//             FROM userprogress
+//             JOIN verbs ON userprogress.verb_id = verbs.id
+//             WHERE userprogress.user_id = $1 
+//             // AND verbs.level = ANY($2) 
+//             // AND verbs.level2 = 1
+//             AND  userprogress.tense = $3
+//             AND  userprogress.score > 0`,
+//             [user_id, tense]
+//         );
+//         return progressInf;
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+
+
 
 module.exports = {
     getUserProgress,
     updateUserProgress,
-
+    progressForLevel,
 };

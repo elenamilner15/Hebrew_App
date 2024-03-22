@@ -1,47 +1,19 @@
 // server/models/Verb.js
 const db = require('../database/connection');
 
-const countInfinitive = async (level, category) => {
-    try {
-        let levelRange;
-        if (level === '1') {
-            // For level 1 where gr is 1, 2, or 3
-            levelRange = [1, 2, 3];
-        } else if (level === '2') {
-            // For level 2 where gr is 4 or 5
-            levelRange = [4, 5];
-        } else {
-            // Handle other levels if needed
-            throw new Error('Invalid level');
-        }
+////////////////////////////////////////////////////////////////////////////////
+//              INFINITIVE                            //
+///////////////////////////////////////////////////////////////////////////////
 
-        const verbsCount = await db.one(`
-            SELECT COUNT(*)
-            FROM verbs
-            WHERE level = ANY($1)
-            AND level2 = 1
-            AND gr = $2
-        `, [levelRange, category]);
-
-        return verbsCount.count;
-    } catch (error) {
-        throw error;
-    }
-};
-
-
-// Function to fetch all Infinitive
+// get all Infinitive by level and category
 const getInfinitive = async (level, category) => {
     try {
         let levelRange;
         if (level === '1') {
-            // For level 1 where gr is 1, 2, or 3
             levelRange = [1, 2, 3];
         } else if (level === '2') {
-            // For level 2where gr is 4 or 5
             levelRange = [4, 5];
         } else {
-            // Handle other levels if needed
         }
 
         const verbs = await db.any(`
@@ -67,23 +39,41 @@ const getInfinitive = async (level, category) => {
     }
 };
 
+//total all Infinitive by level
+const totalInfinitive = async (level) => {
+    try {
+        let levelRange;
+        if (level === '1') {
+            levelRange = [1, 2, 3];
+        } else if (level === '2') {
+            levelRange = [4, 5];
+        } else {
+            throw new Error('Invalid level');
+        }
+
+        const total = await db.one(
+            `SELECT COUNT(*)
+            FROM verbs
+            WHERE level = ANY($1)       
+            AND level2 = 1`,
+            [levelRange]
+        );
+        return total;
+    } catch (error) {
+        throw error;
+    }
+};
 
 
-// // Function to fetch the next word from the list
-// const fetchNextWord = async (level, category, currentIndex) => {
-//     try {
-//         const verbs = await getInfinitive(level, category);
-//         const nextIndex = (currentIndex + 1) % verbs.length;
-//         return verbs[nextIndex];
-//     } catch (error) {
-//         throw error;
-//     }
-// };
+
+////////////////////////////////////////////////////////////////////
 
 
 
-// Function to fetch all Present tense
-const getPresent = async (level, part_of_speech) => {
+
+
+// get all Present1 by level and part_of_speech
+const getPresent1 = async (level, part_of_speech) => {
     try {
         const verbs = await db.any(`
         SELECT
@@ -99,11 +89,14 @@ const getPresent = async (level, part_of_speech) => {
           ap_fp,
           ap_fp_trans,
           level,
+          level2,
+          gr,
           part_of_speech
-        FROM verbs
-        WHERE level = $1
-        AND part_of_speech = $2
-        LIMIT 5`, [level, part_of_speech]);
+          FROM verbs
+          WHERE level = $1
+          AND part_of_speech = $2
+          AND level2 = 1`,
+            [level, part_of_speech]);
 
         return verbs;
     } catch (error) {
@@ -111,12 +104,204 @@ const getPresent = async (level, part_of_speech) => {
     }
 };
 
+// Function to count all Present1 tense
+const totalPresent1 = async (level, part_of_speech) => {
+    try {
+        const total = await db.one(
+            `SELECT COUNT(*)
+             FROM verbs          
+             WHERE level = $1
+             AND part_of_speech = $2
+             AND level2 = 1`,
+            [level, part_of_speech]);
+        return total;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// get all Present2 by level and part_of_speech
+const getPresent2 = async (level, part_of_speech) => {
+    try {
+        const verbs = await db.any(`
+        SELECT
+          id,
+            meaning,
+            root,
+            ap_ms,
+            ap_ms_trans,
+            ap_fs,
+            ap_fs_trans,
+            ap_mp,
+            ap_mp_trans,
+            ap_fp,
+            ap_fp_trans,
+            level,
+            level2,
+            gr,
+            part_of_speech
+          FROM verbs
+          WHERE level = $1
+          AND part_of_speech = $2
+          AND level2 != 3`,
+            [level, part_of_speech]);
+
+        return verbs;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Function to count all Present2 tense
+const totalPresent2 = async (level, part_of_speech) => {
+    try {
+        const total = await db.one(
+            `SELECT COUNT(*)
+             FROM verbs          
+             WHERE level = $1
+             AND part_of_speech = $2
+             AND level2 != 3`,
+            [level, part_of_speech]);
+        return total;
+    } catch (error) {
+        throw error;
+    }
+};
+
+//////////////////////////////////////////////
+//                  PAST                  //
+////////////////////////////////////////////
+
+// get all Past1 by level and part_of_speech
+const getPast1 = async (level, part_of_speech) => {
+    try {
+        const verbs = await db.any(`
+        SELECT
+         id,
+         meaning,
+         root,
+         perf_1s,
+         perf_1s_trans,
+         perf_1p,
+         perf_1p_trans,
+         perf_2ms,
+         perf_2ms_trans,
+         perf_2fs,
+         perf_2fs_trans,
+         perf_2mp,
+         perf_2mp_trans,
+         perf_2fp,
+         perf_2fp_trans,
+         perf_3ms,
+         perf_3ms_trans,
+         perf_3fs,
+         perf_3fs_trans,
+         perf_3p,
+         perf_3p_trans,        
+         level,
+         level2,
+         gr,
+         part_of_speech
+         FROM verbs
+         WHERE level = $1
+         AND part_of_speech = $2
+         AND level2 = 1`,
+            [level, part_of_speech]);
+
+        return verbs;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Function to count all Past1 tense
+const totalPast1 = async (level, part_of_speech) => {
+    try {
+        const total = await db.one(
+            `SELECT COUNT(*)
+             FROM verbs          
+             WHERE level = $1
+             AND part_of_speech = $2
+             AND level2 = 1`,
+            [level, part_of_speech]);
+        return total;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+// get all Past1 by level and part_of_speech
+const getPast2 = async (level, part_of_speech) => {
+    try {
+        const verbs = await db.any(`
+        SELECT
+         id,
+         meaning,
+         root,
+         perf_1s,
+         perf_1s_trans,
+         perf_1p,
+         perf_1p_trans,
+         perf_2ms,
+         perf_2ms_trans,
+         perf_2fs,
+         perf_2fs_trans,
+         perf_2mp,
+         perf_2mp_trans,
+         perf_2fp,
+         perf_2fp_trans,
+         perf_3ms,
+         perf_3ms_trans,
+         perf_3fs,
+         perf_3fs_trans,
+         perf_3p,
+         perf_3p_trans,        
+         level,
+         level2,
+         gr,
+         part_of_speech
+         FROM verbs
+         WHERE level = $1
+         AND part_of_speech = $2
+         AND level2 = 1`,
+            [level, part_of_speech]);
+
+        return verbs;
+    } catch (error) {
+        throw error;
+    }
+};
+
+// Function to count all Past1 tense
+const totalPast2 = async (level, part_of_speech) => {
+    try {
+        const total = await db.one(
+            `SELECT COUNT(*)
+             FROM verbs          
+             WHERE level = $1
+             AND part_of_speech = $2
+             AND level2 = 1`,
+            [level, part_of_speech]);
+        return total;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 
 module.exports = {
-    countInfinitive,
     getInfinitive,
-    getPresent,
-
+    totalInfinitive,
+    getPresent1,
+    totalPresent1,
+    getPresent2,
+    totalPresent2,
+    getPast1,
+    totalPast1,
+    getPast2,
+    totalPast2,
 };
 
 

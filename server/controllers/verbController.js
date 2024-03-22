@@ -5,29 +5,6 @@ const Userprogress = require('../models/Userprogress');
 
 const calculateGroups = require('../utils/calculateGroups');
 
-exports.getInfinitive = async (req, res) => {
-    try {
-        const { level, category } = req.params;
-        const verbs = await Verb.getInfinitive(level, category);
-        res.status(200).json(verbs);
-    } catch (error) {
-        console.error('Error fetching Infinitive:', error);
-        res.status(500).json({ error: 'Error fetching Infinitive' });
-    }
-};
-
-
-exports.countInfinitive = async (req, res) => {
-    try {
-        const { level, category } = req.params;
-        const verbsCount = await Verb.countInfinitive(level, category);
-        res.status(200).json(verbsCount);
-    } catch (error) {
-        console.error('Error counting Infinitive:', error);
-        res.status(500).json({ error: 'Error counting Infinitive' });
-    }
-};
-
 // Function to update user progress
 exports.updateUserProgressController = async (req, res) => {
     const { user_id, verb_id, tense, score, attempts } = req.body;
@@ -40,41 +17,37 @@ exports.updateUserProgressController = async (req, res) => {
     }
 };
 
+///////////////////////////////////////////////////////////////////////
 
-// Controller function to shuffle X Verbs
-exports.shuffleXVerbs = async (req, res) => {
+exports.getInfinitive = async (req, res) => {
     try {
         const { level, category } = req.params;
-
-
-        const { totalVerbs } = await countInfinitive(level, category);
-        const groups = calculateGroups(totalVerbs);
-
-        res.status(200).json({ groups });
+        const verbs = await Verb.getInfinitive(level, category);
+        res.status(200).json(verbs);
     } catch (error) {
-        console.error('Error shuffling X verbs:', error);
-        res.status(500).json({ error: 'Error shuffling X verbs' });
+        console.error('Error fetching Infinitive:', error);
+        res.status(500).json({ error: 'Error fetching Infinitive' });
     }
 };
 
 
-
-
-
-
-
-
-
-
+exports.totalInfinitive = async (req, res) => {
+    try {
+        const { level } = req.params;
+        const total = await Verb.totalInfinitive(level);
+        res.status(200).json({ total: total.count });
+    } catch (error) {
+        console.error('Error fetching infinitive per level:', error);
+        res.status(500).json({ error: 'Error fetching infinitive per level' });
+    }
+};
 
 ///////////////////////////////////////////////////////////////////////
 
-
-
-exports.getPresent = async (req, res) => {
+exports.getPresent1 = async (req, res) => {
     try {
-        const { level, part_of_speech } = req.params; // Get selectedLevel from query parameters
-        const verbs = await Verb.getPresent(level, part_of_speech); // Pass selectedLevel to the function
+        const { level, part_of_speech } = req.params;
+        const verbs = await Verb.getPresent1(level, part_of_speech);
         res.status(200).json(verbs);
     } catch (error) {
         console.error('Error fetching Present:', error);
@@ -82,5 +55,36 @@ exports.getPresent = async (req, res) => {
     }
 };
 
+exports.totalPresent1 = async (req, res) => {
+    try {
+        const { level } = req.params;
+        const total = await Verb.totalPresent1(level);
+        res.status(200).json({ total: total.count });
+    } catch (error) {
+        console.error('Error fetching infinitive per level:', error);
+        res.status(500).json({ error: 'Error fetching infinitive per level' });
+    }
+};
 
 
+exports.getPresent2 = async (req, res) => {
+    try {
+        const { level, part_of_speech } = req.params;
+        const verbs = await Verb.getPresent2(level, part_of_speech);
+        res.status(200).json(verbs);
+    } catch (error) {
+        console.error('Error fetching Present:', error);
+        res.status(500).json({ error: 'Error fetching Present' });
+    }
+};
+
+exports.totalPresent2 = async (req, res) => {
+    try {
+        const { level } = req.params;
+        const total = await Verb.totalPresent2(level);
+        res.status(200).json({ total: total.count });
+    } catch (error) {
+        console.error('Error fetching infinitive per level:', error);
+        res.status(500).json({ error: 'Error fetching infinitive per level' });
+    }
+};

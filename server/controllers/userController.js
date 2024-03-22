@@ -29,3 +29,20 @@ exports.updateUserProgress = async (req, res) => {
     }
 };
 
+
+// server\controllers\userController.js
+//////////////////////////////////////////////////
+exports.getProgressForLevel = async (req, res) => {
+    try {
+        const { user_id, level, tense } = req.params;
+        // const { user_id, level, tense } = req.body; 
+        const progressInf = await Userprogress.progressForLevel(user_id, level, tense);
+        res.status(200).json({
+            correctInfinitive: progressInf ? progressInf.count : 0
+        });
+    } catch (error) {
+        console.error('Error fetching infinitive progress:', error);
+        res.status(500).json({ error: 'Error fetching infinitive progress' });
+    }
+};
+
