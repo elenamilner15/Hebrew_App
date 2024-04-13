@@ -1,6 +1,10 @@
 // client\src\redux\actions\verbsActions.js
 
 import { fetchInfinitive as apiFetchInfinitive } from '../../api.js';
+import { fetchPresent as apifetchPresent } from '../../api.js';
+import { fetchPresent2 as apifetchPresent2 } from '../../api.js';
+
+
 import { fetchTotalInfinitive as apiFetchTotalInfinitive } from '../../api.js';
 import { fetchProgressForLevel as apiFetchProgressForLevel } from '../../api.js';
 import { updateUserProgress as apiUpdateUserProgress } from '../../api.js';
@@ -27,25 +31,37 @@ export const fetchInfinitive = (level, category) => {
         }
     };
 };
-// client\src\redux\actions\verbsActions.js
-// shuffle X verbs
-// export const fetchInfinitiveShuffled = (level, category, x) => {
+
+
+// export const fetchPresent1 = (level, part_of_speech) => {
 //     return async (dispatch) => {
 //         try {
-//             const fetchedVerbs = await apiFetchInfinitive(level, category);
-//             if (fetchedVerbs) {
-//                 const shuffledVerbs = fetchedVerbs.slice().sort(() => Math.random() - 0.5).slice(0, x);
-//                 // console.log('Shuffled verbs:', shuffledVerbs);
-//                 return shuffledVerbs;
-//             } else {
-//                 throw new Error('Failed to fetch shuffled verbs');
+//             const success = await apifetchPresent1(level, part_of_speech);
+//             if (success) {
+//                 // console.log('finally!')
 //             }
+//             return success; // Return the success status
 //         } catch (error) {
-//             console.error('Error during fetchInfinitiveShuffled:', error);
+//             console.error('Error during fetchPresent1:', error);
 //             throw error;
 //         }
 //     };
 // };
+
+export const fetchPresent = (level, binian) => {
+    return async (dispatch) => {
+        try {
+            const success = await apifetchPresent(level, binian);
+            if (success) {
+                // console.log('finally!')
+            }
+            return success; // Return the success status
+        } catch (error) {
+            console.error('Error during fetchPresent1:', error);
+            throw error;
+        }
+    };
+};
 
 // client\src\redux\actions\verbsActions.js
 // update user progress
@@ -53,7 +69,7 @@ export const updateUserProgress = ({ user_id, verb_id, tense, score, attempts })
     console.log('Action Payload:', { user_id, verb_id, tense, score, attempts });
     return async (dispatch) => {
         try {
-            // console.log('Dispatching updateUserProgress:', { user_id, verb_id, tense, score, attempts });
+            console.log('Dispatching updateUserProgress:', { user_id, verb_id, tense, score, attempts });
             const data = await apiUpdateUserProgress({ user_id, verb_id, tense, score, attempts });
 
             dispatch({

@@ -9,7 +9,7 @@ import Vocabulary from '../components/L_Vocabulary';
 // import G_Vocabulary from '../components/G_Vocabulary';
 import N_Vocabulary from '../components/N_Vocabulary';
 import N_Grammar from '../components/N_Grammar';
-import p_Grammar from '../components/P_Grammar';
+import P_Grammar from '../components/P_Grammar';
 import Grammar from '../components/L_Grammar';
 import Steps from '../components/L_Steps';
 

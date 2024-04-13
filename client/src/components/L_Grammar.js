@@ -26,11 +26,12 @@ function L_Grammar() {
     const [selectedBinian, setSelectedBinian] = useState(null);
 
     const tenses = {
-        '1': 'Present',
-        '2': 'Past',
-        '3': 'Future',
-        '4': 'Imperative',
+        present: 'Present',
+        past: 'Past',
+        future: 'Future',
+        imp: 'Imperative',
     };
+
 
     // const binians = {
     //     '1': 'Paal',
@@ -118,7 +119,7 @@ function L_Grammar() {
 
                 <div className="tenses">
                     {Object.keys(tenses).map((tense) => (
-                        <div key={tense} className={`tense t${tense}`} onClick={() => handleTenseClick(tense)}>
+                        <div key={tense} className={`tense ${tense}`} onClick={() => handleTenseClick(tense)}>
                             <p>{tenses[tense]}</p>
                         </div>
                     ))}

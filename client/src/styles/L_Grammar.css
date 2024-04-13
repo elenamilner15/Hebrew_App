@@ -166,23 +166,22 @@
 }
 
 
-
-.t1 {
+.present {
     background: #FFEBD8 url('pic/icons/tn1.png') bottom/cover no-repeat;
     background-size: 95%;
 }
 
-.t2 {
+.past {
     background: #FFEBD8 url('pic/icons/tn2.png') bottom/cover no-repeat;
     background-size: 75%;
 }
 
-.t3 {
+.future {
     background: #FFEBD8 url('pic/icons/tn3.png') bottom/cover no-repeat;
     background-size: 90%;
 }
 
-.t4 {
+.imp {
     background: #FFEBD8 url('pic/icons/tn4.png') bottom/cover no-repeat;
     background-size: 64%;
 

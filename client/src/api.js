@@ -110,8 +110,8 @@ export const fetchTotalInfinitive = async (level) => {
 
 
 // Function to fetch Present1 per level
-export const fetchPresent1 = async (level, part_of_speech) => {
-    const apiUrl = `${serverUrl}/verbs/present1/${level}/${part_of_speech}`;
+export const fetchPresent = async (level, binian) => {
+    const apiUrl = `${serverUrl}/verbs/present/${level}/${binian}`;
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -126,9 +126,25 @@ export const fetchPresent1 = async (level, part_of_speech) => {
 };
 
 
+// export const fetchPresent1 = async (level, part_of_speech1) => {
+//     const apiUrl = `${serverUrl}/verbs/present1/${level}/${part_of_speech1}`;
+//     try {
+//         const response = await fetch(apiUrl);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         console.error('Error fetching Infinitive per level:', error);
+//         throw error;
+//     }
+// };
+
+
 // Function to fetch Present2 per level
-export const fetchPresent2 = async (level, part_of_speech) => {
-    const apiUrl = `${serverUrl}/verbs/present2/${level}/${part_of_speech}`;
+export const fetchPresent2 = async (level, part_of_speech2) => {
+    const apiUrl = `${serverUrl}/verbs/present2/${level}/${part_of_speech2}`;
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {

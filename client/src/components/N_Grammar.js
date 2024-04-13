@@ -17,11 +17,11 @@ function N_Grammar() {
     const totalPresent1 = useSelector((state) => state.verbs.totalPresent1);
 
     const binians = {
-        '1': 'Paal',
-        '2': 'Piel',
-        '3': 'Hifil',
-        '4': 'Hitpael',
-        '5': 'Nifal',
+        paal: 'Paal',
+        piel: 'Piel',
+        hifil: 'Hifil',
+        hitpael: 'Hitpael',
+        nifal: 'Nifal',
     };
 
     const handleBinianClick = (binian) => {
