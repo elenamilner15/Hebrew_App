@@ -71,13 +71,14 @@ const totalInfinitive = async (level) => {
 
 
 
-
+// server/models/Verb.js
 // get all Present1 by level and part_of_speech
-const getPresent1 = async (level, part_of_speech) => {
+const getPresent1 = async (level, part_of_speech1) => {
     try {
         const verbs = await db.any(`
         SELECT
           id,
+          original,
           meaning,
           root,
           ap_ms,
@@ -96,7 +97,7 @@ const getPresent1 = async (level, part_of_speech) => {
           WHERE level = $1
           AND part_of_speech = $2
           AND level2 = 1`,
-            [level, part_of_speech]);
+            [level, part_of_speech1]);
 
         return verbs;
     } catch (error) {
@@ -105,7 +106,7 @@ const getPresent1 = async (level, part_of_speech) => {
 };
 
 // Function to count all Present1 tense
-const totalPresent1 = async (level, part_of_speech) => {
+const totalPresent = async (level, tense) => {
     try {
         const total = await db.one(
             `SELECT COUNT(*)
@@ -113,21 +114,39 @@ const totalPresent1 = async (level, part_of_speech) => {
              WHERE level = $1
              AND part_of_speech = $2
              AND level2 = 1`,
-            [level, part_of_speech]);
+            [level, tense]);
         return total;
     } catch (error) {
         throw error;
     }
 };
 
+// const totalPresent1 = async (level, part_of_speech) => {
+//     try {
+//         const total = await db.one(
+//             `SELECT COUNT(*)
+//              FROM verbs          
+//              WHERE level = $1
+//              AND part_of_speech = $2
+//              AND level2 = 1`,
+//             [level, part_of_speech]);
+//         return total;
+//     } catch (error) {
+//         throw error;
+//     }
+// };
+
+
 // get all Present2 by level and part_of_speech
-const getPresent2 = async (level, part_of_speech) => {
+const getPresent2 = async (level, part_of_speech2) => {
     try {
         const verbs = await db.any(`
         SELECT
           id,
+          original,
             meaning,
             root,
+            original,
             ap_ms,
             ap_ms_trans,
             ap_fs,
@@ -144,7 +163,7 @@ const getPresent2 = async (level, part_of_speech) => {
           WHERE level = $1
           AND part_of_speech = $2
           AND level2 != 3`,
-            [level, part_of_speech]);
+            [level, part_of_speech2]);
 
         return verbs;
     } catch (error) {
@@ -295,7 +314,8 @@ module.exports = {
     getInfinitive,
     totalInfinitive,
     getPresent1,
-    totalPresent1,
+    totalPresent,
+    // totalPresent1,
     getPresent2,
     totalPresent2,
     getPast1,
