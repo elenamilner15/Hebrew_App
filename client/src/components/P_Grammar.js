@@ -18,7 +18,7 @@ import { calculateGroupSize2 } from '../utils/utils';
 
 import { fetchProgressForLevel, fetchTotalPresent } from '../redux/actions/verbsActions.js';
 
-
+// Function to get unique parts of verb meanings to avoid repetition in display
 const getUniqueMeaningParts = (verbs) => {
     return verbs.map((verb) => {
         let meaningParts = verb.meaning.split(', ');
@@ -66,12 +66,13 @@ const P_Grammar = () => {
 
 
 
-
+    // Fetch verbs based on the selected level and binian
     useEffect(() => {
         const fetchVerbs = async () => {
             try {
                 const fetchedVerbs = await dispatch(fetchPresent(level, binian));
                 setVerbs(fetchedVerbs);
+                // Initialize userAnswers for the fetched verbs
                 setUserAnswers(fetchedVerbs.map(() => ({ ap_ms: '', ap_fs: '', ap_mp: '', ap_fp: '' })));
             } catch (error) {
                 console.error('Error fetching verbs:', error);
@@ -80,8 +81,19 @@ const P_Grammar = () => {
         fetchVerbs();
     }, [dispatch, level, binian]);
 
+    // Reset state for new set of verbs when currentIndex changes
+    useEffect(() => {
+        if (verbs.length > 0) {
+            const newAnswers = verbs.slice(currentIndex * calculateGroupSize2(verbs.length), (currentIndex + 1) * calculateGroupSize2(verbs.length))
+                .map(() => ({ ap_ms: '', ap_fs: '', ap_mp: '', ap_fp: '' }));
+            setUserAnswers(newAnswers);
+        }
+        setIsCheckComplete(false);
+    }, [currentIndex, verbs]);
 
-    ///////////////////////////////////////////
+
+    ///////////////////////////////////////////  
+
     useEffect(() => {
         // Reset states when currentIndex changes, to fetch/display new set of verbs
         setTestVerbs([]);
@@ -92,14 +104,7 @@ const P_Grammar = () => {
     }, [currentIndex]);
     //////////////////////////////////////
 
-    // const handleInputChange = (index, field, value) => {
-    //     const updatedAnswers = [...userAnswers];
-    //     updatedAnswers[index][field] = value;
-    //     setUserAnswers(updatedAnswers);
-    //     console.log('Updated userAnswers:', updatedAnswers); // Log 1
-    // };
-
-
+    // Update userAnswers state as user types in input fields
     const handleInputChange = (index, field, value) => {
         const updatedAnswers = userAnswers.map((answer, idx) => {
             if (idx === index) {
@@ -108,6 +113,7 @@ const P_Grammar = () => {
             return answer;
         });
         setUserAnswers(updatedAnswers);
+
 
 
         const anyFilled = updatedAnswers.some(answer => {
@@ -262,51 +268,81 @@ const P_Grammar = () => {
 
 
     /////////////////////////////////////////
+    // const handleCheck = async () => {
+    //     const startIndex = currentIndex * groupSize2;
+    //     const endIndex = Math.min(startIndex + groupSize2, verbs.length);
+
+    //     let roundScore = 0; // Score for the round
+
+    //     for (let index = startIndex; index < endIndex; index++) {
+    //         const adjustedIndex = index - startIndex;
+    //         const currentVerb = verbs[index];
+    //         const userAnswer = userAnswers[adjustedIndex];
+
+    //         // Check each form and update the score
+    //         const forms = ['ap_ms', 'ap_fs', 'ap_mp', 'ap_fp'];
+    //         for (let form of forms) {
+    //             const isCorrect = userAnswer[form] === currentVerb[form];
+    //             const score = isCorrect ? 1 : 0;
+    //             roundScore += score;
+
+    //             // Log the result for each form
+    //             console.log(`Form: ${form}, User answer: ${userAnswer[form]}, Correct answer: ${currentVerb[form]}, Is correct: ${isCorrect}, Score: ${score}`);
+
+    //             // Update user progress
+    //             try {
+    //                 console.log(`Updating user progress for user_id: ${user_id}, verb_id: ${currentVerb.id}, tense: ${tense}, form: ${form}, score: ${score}, attempts: 1`);
+    //                 await updateUserProgress({ user_id, verb_id: currentVerb.id, tense, score, attempts: 1 });
+    //             } catch (error) {
+    //                 console.error(`Error updating user progress for verb ${currentVerb.id} and form ${form}:`, error);
+    //             }
+    //         }
+    //     }
+
+    //     // Update the total score
+    //     setTotalScore(prevScore => prevScore + roundScore);
+
+    //     // Check if all verbs have been tested
+    //     if (endIndex >= verbs.length) {
+    //         setAllVerbsTested(true);
+    //     } else {
+    //         // Move to the next set of verbs
+    //         setCurrentIndex(prevIndex => prevIndex + 1);
+    //     }
+
+    //     setIsCheckComplete(true);
+    // };
+
     const handleCheck = async () => {
         const startIndex = currentIndex * groupSize2;
         const endIndex = Math.min(startIndex + groupSize2, verbs.length);
-
-        let roundScore = 0; // Score for the round
+        let roundScore = 0;
 
         for (let index = startIndex; index < endIndex; index++) {
             const adjustedIndex = index - startIndex;
             const currentVerb = verbs[index];
             const userAnswer = userAnswers[adjustedIndex];
 
-            // Check each form and update the score
             const forms = ['ap_ms', 'ap_fs', 'ap_mp', 'ap_fp'];
-            for (let form of forms) {
+            forms.forEach(form => {
                 const isCorrect = userAnswer[form] === currentVerb[form];
                 const score = isCorrect ? 1 : 0;
                 roundScore += score;
 
-                // Log the result for each form
-                console.log(`Form: ${form}, User answer: ${userAnswer[form]}, Correct answer: ${currentVerb[form]}, Is correct: ${isCorrect}, Score: ${score}`);
-
-                // Update user progress
-                try {
-                    console.log(`Updating user progress for user_id: ${user_id}, verb_id: ${currentVerb.id}, tense: ${tense}, form: ${form}, score: ${score}, attempts: 1`);
-                    await updateUserProgress({ user_id, verb_id: currentVerb.id, tense, score, attempts: 1 });
-                } catch (error) {
-                    console.error(`Error updating user progress for verb ${currentVerb.id} and form ${form}:`, error);
-                }
-            }
+                dispatch(updateUserProgress({
+                    user_id,
+                    verb_id: currentVerb.id,
+                    tense,
+                    score,
+                    attempts: 1
+                }));
+            });
         }
 
-        // Update the total score
         setTotalScore(prevScore => prevScore + roundScore);
-
-        // Check if all verbs have been tested
-        if (endIndex >= verbs.length) {
-            setAllVerbsTested(true);
-        } else {
-            // Move to the next set of verbs
-            setCurrentIndex(prevIndex => prevIndex + 1);
-        }
-
+        setCurrentIndex(prevIndex => prevIndex + 1);
         setIsCheckComplete(true);
     };
-
 
 
     const getPerformanceMessage = (percentage) => {
