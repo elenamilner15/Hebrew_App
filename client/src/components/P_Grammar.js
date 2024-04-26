@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
 import { fetchPresent, updateUserProgress } from '../redux/actions/verbsActions';
+import HebrewKeyboard from './HebrewKeyboard';
 
 
 import '../styles/P_Grammar.css';
@@ -62,8 +63,16 @@ const P_Grammar = () => {
     const [allVerbsTested, setAllVerbsTested] = useState(false); // Check if all verbs tested
 
     const [totalScore, setTotalScore] = useState(0);
+    const [focusedInput, setFocusedInput] = useState({ index: null, type: null });
 
-
+    const handleKeyPress = (key) => {
+        if (focusedInput.index !== null && focusedInput.type) {
+            // Update the userAnswers with the key pressed
+            const updatedAnswers = [...userAnswers];
+            updatedAnswers[focusedInput.index][focusedInput.type] += key; // Append the key to the current value
+            setUserAnswers(updatedAnswers);
+        }
+    };
 
 
     // Fetch verbs based on the selected level and binian
@@ -113,6 +122,7 @@ const P_Grammar = () => {
             return answer;
         });
         setUserAnswers(updatedAnswers);
+        setFocusedInput({ index, type: field }); // Set focus information
 
 
 
@@ -224,94 +234,6 @@ const P_Grammar = () => {
     const [cellOccupancy, setCellOccupancy] = useState(Array(testVerbs.length).fill(false));
 
 
-    // const handleDrop = (verbId, cellIndex) => {
-
-    //     const droppedVerb = guessVerbs.find((verb) => verb.id === verbId);
-
-    //     const droppedVerbIndex = guessVerbs.findIndex((verb) => verb.id === verbId)
-    //     // console.log("droppedVerbIndex", droppedVerbIndex)
-
-    //     // Check if the cell is occupied based on cellOccupancy
-    //     if (cellOccupancy[cellIndex]) {
-    //         console.log('Cell is occupied. Cell Index:', cellIndex);
-    //         console.log('Verb not dropped.');
-    //         return;
-    //     } else {
-    //         // Check if the verbId is already dropped
-    //         if (droppedVerbs.some(verb => verb && verb.id === verbId)) {
-    //             console.log('Verb is already dropped. Verb not dropped again.');
-    //             return;
-    //         }
-
-    //         setDroppedVerbs((prevDroppedVerbs) => {
-    //             const newDroppedVerbs = [...prevDroppedVerbs];
-    //             newDroppedVerbs[cellIndex] = droppedVerb; // Store the verb object at the correct cell index
-    //             return newDroppedVerbs;
-    //         });
-
-
-
-    //         // Update cellOccupancy to mark the cell as occupied
-    //         setCellOccupancy(prevOccupancy => {
-    //             const updatedOccupancy = [...prevOccupancy];
-    //             updatedOccupancy[cellIndex] = true;
-    //             // console.log('setCellOccupancy', cellIndex)
-    //             return updatedOccupancy;
-    //         });
-
-    //         // Update guessVerbs to remove the dropped verb
-    //         setGuessVerbs((prevGuessVerbs) => prevGuessVerbs.filter((_, index) => index !== droppedVerbIndex));
-    //     }
-
-    // }
-
-
-
-    /////////////////////////////////////////
-    // const handleCheck = async () => {
-    //     const startIndex = currentIndex * groupSize2;
-    //     const endIndex = Math.min(startIndex + groupSize2, verbs.length);
-
-    //     let roundScore = 0; // Score for the round
-
-    //     for (let index = startIndex; index < endIndex; index++) {
-    //         const adjustedIndex = index - startIndex;
-    //         const currentVerb = verbs[index];
-    //         const userAnswer = userAnswers[adjustedIndex];
-
-    //         // Check each form and update the score
-    //         const forms = ['ap_ms', 'ap_fs', 'ap_mp', 'ap_fp'];
-    //         for (let form of forms) {
-    //             const isCorrect = userAnswer[form] === currentVerb[form];
-    //             const score = isCorrect ? 1 : 0;
-    //             roundScore += score;
-
-    //             // Log the result for each form
-    //             console.log(`Form: ${form}, User answer: ${userAnswer[form]}, Correct answer: ${currentVerb[form]}, Is correct: ${isCorrect}, Score: ${score}`);
-
-    //             // Update user progress
-    //             try {
-    //                 console.log(`Updating user progress for user_id: ${user_id}, verb_id: ${currentVerb.id}, tense: ${tense}, form: ${form}, score: ${score}, attempts: 1`);
-    //                 await updateUserProgress({ user_id, verb_id: currentVerb.id, tense, score, attempts: 1 });
-    //             } catch (error) {
-    //                 console.error(`Error updating user progress for verb ${currentVerb.id} and form ${form}:`, error);
-    //             }
-    //         }
-    //     }
-
-    //     // Update the total score
-    //     setTotalScore(prevScore => prevScore + roundScore);
-
-    //     // Check if all verbs have been tested
-    //     if (endIndex >= verbs.length) {
-    //         setAllVerbsTested(true);
-    //     } else {
-    //         // Move to the next set of verbs
-    //         setCurrentIndex(prevIndex => prevIndex + 1);
-    //     }
-
-    //     setIsCheckComplete(true);
-    // };
 
     const handleCheck = async () => {
         const startIndex = currentIndex * groupSize2;
@@ -342,6 +264,7 @@ const P_Grammar = () => {
         setTotalScore(prevScore => prevScore + roundScore);
         setCurrentIndex(prevIndex => prevIndex + 1);
         setIsCheckComplete(true);
+        setFocusedInput({ index: null, type: null }); // Clear focus after check
     };
 
 
@@ -498,6 +421,7 @@ const P_Grammar = () => {
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_ms}
                                                     onChange={(e) => handleInputChange(index, 'ap_ms', e.target.value)}
+                                                    onFocus={() => setFocusedInput({ index, type: 'ap_ms' })}
                                                 />
                                             </td>
                                             <td>
@@ -508,6 +432,7 @@ const P_Grammar = () => {
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_fs}
                                                     onChange={(e) => handleInputChange(index, 'ap_fs', e.target.value)}
+                                                    onFocus={() => setFocusedInput({ index, type: 'ap_fs' })}
                                                 />
                                             </td>
                                             <td>
@@ -518,6 +443,7 @@ const P_Grammar = () => {
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_mp}
                                                     onChange={(e) => handleInputChange(index, 'ap_mp', e.target.value)}
+                                                    onFocus={() => setFocusedInput({ index, type: 'ap_mp' })}
                                                 />
                                             </td>
                                             <td>
@@ -528,6 +454,7 @@ const P_Grammar = () => {
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_fp}
                                                     onChange={(e) => handleInputChange(index, 'ap_fp', e.target.value)}
+                                                    onFocus={() => setFocusedInput({ index, type: 'ap_fp' })}
                                                 />
                                             </td>
                                         </tr>
@@ -568,7 +495,8 @@ const P_Grammar = () => {
                         <button className="verb-button" onClick={handleCheck} disabled={!isAnyInputFilled()}>Check</button>
                     )}
 
-
+                    {/* Insert the Hebrew keyboard component here */}
+                    <HebrewKeyboard onKeyPress={(key) => handleKeyPress(key)} />
 
 
                     {isCheckComplete && !allVerbsTested && ( //Stop Next
