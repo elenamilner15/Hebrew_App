@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useNavigate } from 'react-router-dom';
@@ -64,6 +64,11 @@ const P_Grammar = () => {
 
     const [totalScore, setTotalScore] = useState(0);
     const [focusedInput, setFocusedInput] = useState({ index: null, type: null });
+    const [isKeyboardVisible, setIsKeyboardVisible] = useState(false); // State to control the visibility of the keyboard
+    const firstInputRef = useRef(null); // Reference for the first input field
+
+
+
 
     const handleKeyPress = (key) => {
         if (focusedInput.index !== null && focusedInput.type) {
@@ -113,6 +118,13 @@ const P_Grammar = () => {
     }, [currentIndex]);
     //////////////////////////////////////
 
+    useEffect(() => {
+        // Automatically focus the first input field once verbs are fetched and component is ready
+        if (firstInputRef.current) {
+            firstInputRef.current.focus();
+        }
+    }, [verbs]);
+
     // Update userAnswers state as user types in input fields
     const handleInputChange = (index, field, value) => {
         const updatedAnswers = userAnswers.map((answer, idx) => {
@@ -155,11 +167,23 @@ const P_Grammar = () => {
         setTestVerbs(shuffledVerbs);
         setGuessVerbs(shuffledGuess);
         setDroppedVerbs(Array(shuffledVerbs.length).fill(null)); // Reset droppedVerbs for the new test
-        setCellOccupancy(Array(shuffledVerbs.length).fill(false)); // Reset cell occupancy
+        // setCellOccupancy(Array(shuffledVerbs.length).fill(false)); // Reset cell occupancy
 
         // Button test clicked
         setIsCheckComplete(false);
         setTestTaken(true);
+        setIsKeyboardVisible(true); // Show the keyboard only after the test starts
+
+        // Ensure inputs are re-rendered before focusing
+        setTimeout(() => {
+            if (firstInputRef.current) {
+                firstInputRef.current.focus();
+            }
+        }, 100);
+
+
+
+
 
         // console.log('After handleTest - Current index:', currentIndex);
         // console.log('After handleTest - Group size:', groupSize);
@@ -300,19 +324,11 @@ const P_Grammar = () => {
     const uniqueMeaningParts = getUniqueMeaningParts(displayVerbs());
 
 
-    // const isAnyInputFilled = () => {
-    //     const filled = userAnswers.some(answer => answer.ap_ms || answer.ap_fs || answer.ap_mp || answer.ap_fp);
-    //     console.log('isAnyInputFilled:', filled); // Log 2
-    //     return filled;
-    // };
 
     const isAnyInputFilled = () => {
         const displayedAnswers = userAnswers.slice(currentIndex * groupSize2, (currentIndex + 1) * groupSize2);
         return displayedAnswers.every(answer => answer.ap_ms || answer.ap_fs || answer.ap_mp || answer.ap_fp);
     };
-
-    // console.log('Before rendering, isAnyInputFilled:', isAnyInputFilled()); 
-    // console.log('userAnswers:', userAnswers);
 
     return (
         <BasicLayout>
@@ -383,12 +399,6 @@ const P_Grammar = () => {
                                 </tbody> */}
                             </table>
 
-
-
-
-
-
-
                         </div>
                     )}
 
@@ -417,6 +427,7 @@ const P_Grammar = () => {
                                                 {verb.ap_ms_trans}
                                                 <br />
                                                 <input
+                                                    ref={index === 0 ? firstInputRef : null} // Only set ref to the first input
                                                     type="text"
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_ms}
@@ -428,6 +439,7 @@ const P_Grammar = () => {
                                                 {verb.ap_fs_trans}
                                                 <br />
                                                 <input
+                                                    // ref={index === 0 ? firstInputRef : null}
                                                     type="text"
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_fs}
@@ -439,6 +451,7 @@ const P_Grammar = () => {
                                                 {verb.ap_mp_trans}
                                                 <br />
                                                 <input
+                                                    // ref={index === 0 ? firstInputRef : null}
                                                     type="text"
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_mp}
@@ -450,6 +463,7 @@ const P_Grammar = () => {
                                                 {verb.ap_fp_trans}
                                                 <br />
                                                 <input
+                                                    // ref={index === 0 ? firstInputRef : null}
                                                     type="text"
                                                     className="answer-input"
                                                     value={userAnswers[index].ap_fp}
@@ -484,20 +498,15 @@ const P_Grammar = () => {
                     {!testTaken && (
                         <button className="verb-button" onClick={handleTest}>Test</button>
                     )}
-                    {/* {testVerbs.length > 0 && !isCheckComplete && (
-
-                        <button className="verb-button" onClick={handleCheck} disabled={!isInputFilled}>Check</button>
-                    )} */}
 
                     {testVerbs.length > 0 && !isCheckComplete && (
-
-
                         <button className="verb-button" onClick={handleCheck} disabled={!isAnyInputFilled()}>Check</button>
                     )}
 
-                    {/* Insert the Hebrew keyboard component here */}
-                    <HebrewKeyboard onKeyPress={(key) => handleKeyPress(key)} />
-
+                    {/* Render the Hebrew keyboard conditionally */}
+                    {isKeyboardVisible && (
+                        <HebrewKeyboard onKeyPress={(key) => handleKeyPress(key)} />
+                    )}
 
                     {isCheckComplete && !allVerbsTested && ( //Stop Next
                         <button className="verb-button" onClick={handleNext}>Next</button>
