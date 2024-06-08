@@ -22,10 +22,10 @@ import { fetchProgressForLevel, fetchTotalPresent } from '../redux/actions/verbs
 // Function to get unique parts of verb meanings to avoid repetition in display
 const getUniqueMeaningParts = (verbs) => {
     return verbs.map((verb) => {
-        let meaningParts = verb.meaning.split(', ');
+        let meaningParts = verb.meaning.split(/[,;(]/).map(part => part.trim());
         let uniquePart = meaningParts[0];
         let partIndex = 1;
-        while (verbs.some(v => v !== verb && v.meaning.split(', ')[0] === uniquePart)) {
+        while (verbs.some(v => v !== verb && v.meaning.split(/[,;(]/).map(part => part.trim())[0] === uniquePart)) {
             uniquePart = meaningParts.slice(0, partIndex + 1).join(', ');
             partIndex++;
         }
@@ -348,18 +348,18 @@ const P_Grammar = () => {
 
                                 <thead>
                                     <tr>
-                                        <th>Original</th>
                                         <th>Meaning</th>
                                         <th>AP 1MS</th>
                                         <th>AP 1FS</th>
                                         <th>AP MP</th>
                                         <th>AP FP</th>
+                                        <th>Original</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {displayVerbs().map((verb, index) => (
                                         <tr key={index}>
-                                            <td>{verb.original}</td>
+
                                             <td>{uniqueMeaningParts[index]}</td>
 
 
@@ -383,6 +383,7 @@ const P_Grammar = () => {
                                                 <br />
                                                 {verb.ap_fp}
                                             </td>
+                                            <td>{verb.original}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -410,18 +411,17 @@ const P_Grammar = () => {
 
                                 <thead>
                                     <tr>
-                                        <th>Original</th>
                                         <th>Meaning</th>
                                         <th>AP MS</th>
                                         <th>AP FS</th>
                                         <th>AP MP</th>
                                         <th>AP FP</th>
+                                        <th>Original</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {displayVerbs().map((verb, index) => (
                                         <tr key={index}>
-                                            <td>{verb.original}</td>
                                             <td>{uniqueMeaningParts[index]}</td>
                                             <td>
                                                 {verb.ap_ms_trans}
@@ -471,6 +471,7 @@ const P_Grammar = () => {
                                                     onFocus={() => setFocusedInput({ index, type: 'ap_fp' })}
                                                 />
                                             </td>
+                                            <td>{verb.original}</td>
                                         </tr>
                                     ))}
                                 </tbody>
