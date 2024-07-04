@@ -13,8 +13,6 @@ import MenuBar2 from './MenuBar2.js';
 import BasicLayout from '../layouts/BasicLayout';
 import '../styles/MainContent.css';
 import { calculateGroupSize2 } from '../utils/utils';
-// import '../styles/MainContent.css';
-// import '../styles/Account.css';
 
 
 import { fetchProgressForLevel, fetchTotalPresent } from '../redux/actions/verbsActions.js';
@@ -185,8 +183,7 @@ const P_Grammar = () => {
 
 
 
-        // console.log('After handleTest - Current index:', currentIndex);
-        // console.log('After handleTest - Group size:', groupSize);
+
     };
 
     const shuffleVerbs = (array) => {
@@ -390,14 +387,7 @@ const P_Grammar = () => {
 
 
 
-                                {/* <tbody>
-                                    {displayVerbs().map((verb, index) => (
-                                        <tr key={index}>
-                                            <td>{verb.original}</td>
-                                            <td>{verb.meaning}</td>
-                                        </tr>
-                                    ))}
-                                </tbody> */}
+
                             </table>
 
                         </div>
